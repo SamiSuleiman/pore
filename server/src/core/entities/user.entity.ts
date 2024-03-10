@@ -37,3 +37,10 @@ export class User {
   @OneToMany(() => Link, (link) => link.user)
   links: Link[];
 }
+
+export interface UserDto {
+  name: string;
+  email: string;
+  avatar: string;
+  createdAt: Date;
+}

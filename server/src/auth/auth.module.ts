@@ -6,10 +6,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { GithubStrategy } from './github.strategy';
 import { LoggedInGuard } from '../core/guards/logged-in.guard';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
-    // UserModule,
+    UserModule,
     PassportModule,
     JwtModule.register({
       global: true,
