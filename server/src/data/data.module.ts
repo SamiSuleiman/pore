@@ -17,7 +17,6 @@ export class DataModule {
           useFactory: async (
             configService: ConfigService,
           ): Promise<TypeOrmModuleOptions> => {
-            console.log(process.env);
             const _IS_DEV_MODE = configService.get('NODE_ENV') === 'dev';
 
             const _options = {
@@ -30,7 +29,7 @@ export class DataModule {
               synchronize: dataModuleOptions?.synchronize ?? false,
               autoLoadEntities: dataModuleOptions?.autoLoadEntities ?? true,
               logging: dataModuleOptions?.logging ?? true,
-              migrations: ['../../dist/data/migrations/*.js'],
+              migrations: [__dirname + '/migrations/*{.ts,.js}'],
               migrationsRun: dataModuleOptions?.migrationsRun ?? true,
               dropSchema:
                 dataModuleOptions?.dropSchema ?? _IS_DEV_MODE ? true : false,
