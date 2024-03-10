@@ -8,6 +8,10 @@ import { Word } from 'src/core/entities/word.entity';
 import { DataModule } from 'src/data/data.module';
 import { WordService } from './word.service';
 import { WordController } from './word.controller';
+import { DefinitionController } from './definition/definition.controller';
+import { DefinitionService } from './definition/definition.service';
+import { ExampleController } from './example/example.controller';
+import { ExampleService } from './example/example.service';
 
 @Module({
   imports: [
