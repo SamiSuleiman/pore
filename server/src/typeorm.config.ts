@@ -8,7 +8,7 @@ import { User } from './core/entities/user.entity';
 import { Word } from './core/entities/word.entity';
 
 export default new DataSource({
-  type: 'mysql',
+  type: 'mariadb',
   host: process.env['DB_HOST'],
   port: parseInt(process.env['DB_PORT'] as string, 10),
   username: process.env['DB_USERNAME'],
