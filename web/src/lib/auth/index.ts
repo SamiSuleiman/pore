@@ -1,4 +1,5 @@
 import { env } from '$lib/env';
+import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
 
 const TOKEN_KEY = 'PORE_TOKEN';
@@ -15,7 +16,8 @@ export function login() {
 	if (!_urlTokens && !_cookieTokens) return;
 	if (_urlTokens) setTokensInCookie(_urlTokens);
 
-	// this.$isLoggedIn.set(true);
+	isLoggedIn.set(true);
+
 	// this.router.navigate(['/home']);
 }
 

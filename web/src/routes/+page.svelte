@@ -2,8 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { Alert } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
+	import { isLoggedIn } from '../stores/auth.store';
 
 	onMount(() => {
+		console.log($isLoggedIn);
 		goto('/auth');
 	});
 </script>
