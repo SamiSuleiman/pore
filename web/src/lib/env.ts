@@ -5,7 +5,7 @@ const _prodEnv : Env= {
 }
 
 const _devEnv : Env= {
-	baseUrl: 'http://localhost:3000'
+	baseUrl: 'http://localhost:3000/api'
 }
 
 interface Env {

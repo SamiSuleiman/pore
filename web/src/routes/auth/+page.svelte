@@ -1,9 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import { navigateGithubToOAuth } from '$lib/data-access/auth';
+	import { login, navigateGithubToOAuth } from '$lib/data-access/auth';
 
 	onMount(() => {
-		navigateGithubToOAuth();
+		// navigateGithubToOAuth();
+		login();
 	});
 </script>
 
