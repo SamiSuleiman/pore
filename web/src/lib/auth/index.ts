@@ -1,3 +1,4 @@
+import { goto } from '$app/navigation';
 import { env } from '$lib/env';
 import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
@@ -16,8 +17,7 @@ export function login() {
 	if (_urlTokens) setTokensInCookie(_urlTokens);
 
 	isLoggedIn.set(true);
-
-	// this.router.navigate(['/home']);
+	goto('/home');
 }
 
 export function logout() {}
