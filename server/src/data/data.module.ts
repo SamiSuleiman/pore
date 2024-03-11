@@ -20,7 +20,7 @@ export class DataModule {
             const _IS_DEV_MODE = configService.get('NODE_ENV') === 'dev';
 
             const _options = {
-              type: configService.getOrThrow<'mysql' | 'sqlite'>('DB_TYPE'),
+              type: configService.getOrThrow<'mariadb' | 'sqlite'>('DB_TYPE'),
               host: configService.getOrThrow<string>('DB_HOST'),
               port: configService.getOrThrow<number>('DB_PORT'),
               username: configService.getOrThrow<string>('DB_USERNAME'),

@@ -14,7 +14,7 @@ import { UserModule } from '../user/user.module';
     PassportModule,
     JwtModule.register({
       global: true,
-      secret: env['CORE_JWT_SECRET'],
+      secret: `${env['CORE_JWT_SECRET']}`,
     }),
   ],
   controllers: [AuthController],
