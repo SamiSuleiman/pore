@@ -5,7 +5,7 @@ import { UserDto, UserOverviewDto } from './user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../core/entities/user.entity';
 import { UserMapper } from '../core/mappers/user.mapper';
-import { UserDto as SharedUserDto } from './user.dto';
+import { UserDto as SharedUserDto } from '../core/entities/user.entity';
 
 @Injectable()
 export class UserService {

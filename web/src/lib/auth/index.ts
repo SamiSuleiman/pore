@@ -5,8 +5,7 @@ import type { AuthCookie } from './models';
 const TOKEN_KEY = 'PORE_TOKEN';
 
 export function navigateGithubToOAuth() {
-	// window.location.href = `${env.baseUrl}/auth/github`;
-	console.log(env.baseUrl);
+	window.location.href = `${env.baseUrl}/auth/github`;
 }
 
 export function login() {

@@ -42,7 +42,7 @@ export class AuthController {
       name: _name,
       avatar: _avatar,
       createdAt: new Date(),
-    } as any);
+    });
 
     const _data = JSON.stringify(_loginRes);
     return { url: `${process.env['CLIENT_BASE_URL']}/?data=${_data}` };
