@@ -1,7 +1,7 @@
 <script>
-	import { login, navigateGithubToOAuth } from '$lib/auth';
+	import { navigateToGoogleOAuth, login, navigateToGithubOAuth } from '$lib/auth';
 	import { onMount } from 'svelte';
-	import { GithubSolid } from 'flowbite-svelte-icons';
+	import { GithubSolid, GoogleSolid } from 'flowbite-svelte-icons';
 	import { Card } from 'flowbite-svelte';
 	import { Button } from 'flowbite-svelte';
 
@@ -10,7 +10,11 @@
 	});
 
 	function onNavToGithub() {
-		navigateGithubToOAuth();
+		navigateToGithubOAuth();
+	}
+
+	function onNavToGoogle() {
+		navigateToGoogleOAuth();
 	}
 </script>
 
@@ -19,6 +23,9 @@
 		<h5 class="bg-gray-800 font-bold text-white">Login/Sign up</h5>
 		<Button on:click={onNavToGithub}
 			>Continue with GitHub <GithubSolid class="ms-1"></GithubSolid></Button
+		>
+		<Button on:click={onNavToGoogle}
+			>Continue with Google <GoogleSolid class="ms-1"></GoogleSolid></Button
 		>
 	</Card>
 </div>
