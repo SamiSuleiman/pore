@@ -22,6 +22,32 @@ export class AuthController {
     this.configService.getOrThrow('CLIENT_BASE_URL');
   }
 
+  @UseGuards(AuthGuard('google'))
+  @Get('google')
+  authWithGoogle() {}
+
+  @UseGuards(AuthGuard('google'))
+  @Get('google/callback')
+  @Redirect(`${process.env['CLIENT_BASE_URL']}`)
+  async googleCallBack(@Req() req: Express.Request): Promise<{ url: string }> {
+    const _profile = req.user as Profile;
+    const _email = _profile.emails?.[0].value;
+    const _name = _profile.displayName ?? _profile.username;
+    const _avatar = _profile.photos?.[0].value ?? '';
+
+    if (!_email) throw new Error('No email found');
+
+    const _loginRes = await this.authService.login({
+      email: _email,
+      name: _name,
+      avatar: _avatar,
+      createdAt: new Date(),
+    });
+
+    const _data = JSON.stringify(_loginRes);
+    return { url: `${process.env['CLIENT_BASE_URL']}/?data=${_data}` };
+  }
+
   @UseGuards(AuthGuard('github'))
   @Get('github')
   authWithGithub() {}
@@ -29,7 +55,7 @@ export class AuthController {
   @UseGuards(AuthGuard('github'))
   @Get('github/callback')
   @Redirect(`${process.env['CLIENT_BASE_URL']}`)
-  async callBack(@Req() req: Express.Request): Promise<{ url: string }> {
+  async githubCallBack(@Req() req: Express.Request): Promise<{ url: string }> {
     const _profile = req.user as Profile;
     const _email = _profile.emails?.[0].value;
     const _name = _profile.displayName ?? _profile.username;

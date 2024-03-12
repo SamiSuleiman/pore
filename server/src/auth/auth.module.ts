@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { GithubStrategy } from './github.strategy';
 import { LoggedInGuard } from '../core/guards/logged-in.guard';
 import { UserModule } from '../user/user.module';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { UserModule } from '../user/user.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GithubStrategy, LoggedInGuard],
+  providers: [AuthService, GithubStrategy, LoggedInGuard, GoogleStrategy],
 })
 export class AuthModule {}
