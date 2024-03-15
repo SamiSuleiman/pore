@@ -21,7 +21,7 @@ export function login() {
 	if (_urlTokens) setTokensInCookie(_urlTokens);
 
 	isLoggedIn.set(true);
-	goto('/home');
+	// goto('/home');
 }
 
 export function logout() {}
