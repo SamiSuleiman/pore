@@ -21,10 +21,12 @@
 		nonActiveClass="text-gray-500 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-neutral-800 dark:hover:text-white md:dark:hover:bg-transparent"
 		{activeUrl}
 	>
-		<NavLi href="/words">words</NavLi>
-		<NavLi href="/words">tags</NavLi>
-		<NavLi href="/words">links</NavLi>
-		<NavLi href="/words">sources</NavLi>
+		{#if $isLoggedIn}
+			<NavLi href="/words">words</NavLi>
+			<NavLi href="/words">tags</NavLi>
+			<NavLi href="/words">links</NavLi>
+			<NavLi href="/words">sources</NavLi>
+		{/if}
 		<NavLi href="/">{$isLoggedIn ? 'profile' : 'login'}</NavLi>
 	</NavUl>
 </Navbar>
