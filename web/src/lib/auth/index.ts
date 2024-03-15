@@ -4,13 +4,14 @@ import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
 
 const TOKEN_KEY = 'PORE_TOKEN';
+const AUTH_URL = `${env.baseUrl}/auth`;
 
-export function navigateToGithubOAuth() {
-	window.location.href = `${env.baseUrl}/auth/github`;
+export function navigateToGithubOAuth(): void {
+	window.location.href = AUTH_URL + '/github';
 }
 
-export function navigateToGoogleOAuth() {
-	window.location.href = `${env.baseUrl}/auth/google`;
+export function navigateToGoogleOAuth(): void {
+	window.location.href = AUTH_URL + '/google';
 }
 
 export function login() {
@@ -21,12 +22,12 @@ export function login() {
 	if (_urlTokens) setTokensInCookie(_urlTokens);
 
 	isLoggedIn.set(true);
-	goto('/')
+	goto('/');
 }
 
 export function logout() {
 	document.cookie = `${TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-	isLoggedIn.set(false)
+	isLoggedIn.set(false);
 }
 
 export function refresh() {}
