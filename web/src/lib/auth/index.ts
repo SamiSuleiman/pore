@@ -1,5 +1,6 @@
 import { goto } from '$app/navigation';
 import { env } from '$lib/env';
+import { get } from '$lib/http';
 import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
 
@@ -14,7 +15,7 @@ export function navigateToGoogleOAuth(): void {
 	window.location.href = AUTH_URL + '/google';
 }
 
-export function login() {
+export function login(): void {
 	const _urlTokens = extractTokensFromUrl();
 	const _cookieTokens = extractTokensFromCookie();
 
@@ -25,12 +26,23 @@ export function login() {
 	goto('/');
 }
 
-export function logout() {
+export function logout(): void {
 	document.cookie = `${TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 	isLoggedIn.set(false);
 }
 
-export function refresh() {}
+export async function refresh(): Promise<void> {
+	//  const _tokens = this.getTokensFromCookie();
+	// if (!_tokens) return EMPTY;
+	//
+	// return this.httpClient
+	//   .get<LoginResDto>(`${this.authConfig.baseUrl}/refresh`)
+	//   .pipe(tap((_tokens) => this.setTokens(_tokens)));
+	const _tokens = extractTokensFromCookie();
+	if (!_tokens) return;
+	const _refreshed = await get<AuthCookie>(`${AUTH_URL}/refresh`);
+	setTokensInCookie(_refreshed);
+}
 
 export function extractTokensFromUrl(): AuthCookie | undefined {
 	const _url = new URL(window.location.href);
@@ -57,6 +69,6 @@ export function extractTokensFromCookie(): AuthCookie | undefined {
 	return _tokens;
 }
 
-export function setTokensInCookie(tokens: AuthCookie) {
+export function setTokensInCookie(tokens: AuthCookie): void {
 	document.cookie = `${TOKEN_KEY}=${JSON.stringify(tokens)}`;
 }
