@@ -18,13 +18,16 @@
 	}
 </script>
 
-<div class=" m-12 flex justify-center bg-gray-900 align-middle">
-	<Card class="flex flex-col items-center gap-4 bg-gray-800 p-1 pb-4 ">
-		<h5 class="bg-gray-800 font-bold text-white">Login/Sign up</h5>
-		<Button on:click={onNavToGithub}
+<div class="w-full bg-neutral-800 lg:p-4">
+	<Card
+		size="none"
+		class="flex items-center gap-4 border-transparent bg-transparent shadow-transparent"
+	>
+		<h5 class="bg-neutral-800 font-bold text-white">Login / Sign up</h5>
+		<Button class="w-full" on:click={onNavToGithub}
 			>Continue with GitHub <GithubSolid class="ms-1"></GithubSolid></Button
 		>
-		<Button on:click={onNavToGoogle}
+		<Button class="w-full" on:click={onNavToGoogle}
 			>Continue with Google <GoogleSolid class="ms-1"></GoogleSolid></Button
 		>
 	</Card>
