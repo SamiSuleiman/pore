@@ -21,9 +21,14 @@ export function login() {
 	if (_urlTokens) setTokensInCookie(_urlTokens);
 
 	isLoggedIn.set(true);
+	goto('/')
 }
 
-export function logout() {}
+export function logout() {
+	document.cookie = `${TOKEN_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+	isLoggedIn.set(false)
+}
+
 export function refresh() {}
 
 export function extractTokensFromUrl(): AuthCookie | undefined {
