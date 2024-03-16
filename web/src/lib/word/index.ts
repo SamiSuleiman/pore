@@ -1,6 +1,6 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
-import { AddWordDto, UpdateWordDto, type WordDto, type WordPreviewDto } from './model';
+import { type AddWordDto, type UpdateWordDto, type WordDto, type WordPreviewDto } from './model';
 
 const WORDS_URL = `${env.baseUrl}/words`;
 
