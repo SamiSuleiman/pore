@@ -26,7 +26,6 @@
 		if (!_id) return;
 
 		const _res = await deleteWord(_id);
-		console.log(_res);
 		if (!_res) {
 			$error = 'an error occurred';
 			return;
@@ -49,7 +48,12 @@
 		{/if}
 	</Listgroup>
 	{#if $error}
-		<Toast on:close={() => ($error = null)} position="bottom-right" color="red">
+		<Toast
+			divClass="w-full max-w-xs p-4 text-white bg-primary-900 shadow gap-3"
+			on:close={() => ($error = null)}
+			position="bottom-right"
+			color="red"
+		>
 			<FireSolid slot="icon" />
 			<span>{$error}</span>
 		</Toast>
