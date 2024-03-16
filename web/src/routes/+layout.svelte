@@ -9,8 +9,10 @@
 
 <Navbar color="none">
 	<NavBrand href="/">
-		<img src={imgUrl} class="me-3 h-6 text-white sm:h-9" alt="pore Logo" />
-		<span class="self-center whitespace-nowrap text-xl font-semibold text-white">pore</span>
+		<span
+			class="self-center whitespace-nowrap text-xl font-bold font-semibold text-white underline decoration-primary-800 decoration-wavy"
+			>pore</span
+		>
 	</NavBrand>
 	<NavHamburger menuClass="text-white hover:text-gray-500" />
 	<NavUl
@@ -19,12 +21,22 @@
 		{activeUrl}
 	>
 		{#if $isLoggedIn}
-			<NavLi href="/words">words</NavLi>
-			<NavLi href="/tags">tags</NavLi>
-			<NavLi href="/links">links</NavLi>
-			<NavLi href="/sources">sources</NavLi>
+			<NavLi activeClass="underline decoration-wavy text-primary-800 font-bold" href="/words"
+				>words</NavLi
+			>
+			<NavLi activeClass="underline decoration-wavy text-primary-800 font-bold" href="/tags"
+				>tags</NavLi
+			>
+			<NavLi activeClass="underline decoration-wavy text-primary-800 font-bold" href="/links"
+				>links</NavLi
+			>
+			<NavLi activeClass="underline decoration-wavy text-primary-800 font-bold" href="/sources"
+				>sources</NavLi
+			>
 		{/if}
-		<NavLi href="/">{$isLoggedIn ? 'profile' : 'login'}</NavLi>
+		<NavLi activeClass="underline decoration-wavy text-primary-800 font-bold" href="/"
+			>{$isLoggedIn ? 'profile' : 'login'}</NavLi
+		>
 	</NavUl>
 </Navbar>
 <slot />
