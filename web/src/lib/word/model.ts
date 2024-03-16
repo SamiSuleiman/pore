@@ -1,5 +1,3 @@
-import { IsArray, IsUUID, MaxLength, isUUID, IsNotEmpty } from 'class-validator';
-import { Type } from 'class-transformer';
 import type { LinkPreviewDto } from '$lib/link/model';
 import type { SourcePreviewDto } from '$lib/source/model';
 import type { TagPreviewDto } from '$lib/tag/model';
@@ -18,55 +16,33 @@ export interface WordDto extends WordPreviewDto {
 	examples: ExampleDto[];
 }
 
-export class UpdateWordDto {
-	@IsNotEmpty()
-	@MaxLength(60)
+export interface UpdateWordDto {
 	content: string;
-
-	@IsArray()
-	@Type(() => isUUID)
 	tagIds: string[];
-
-	@IsArray()
-	@Type(() => isUUID)
 	linkIds: string[];
-
-	@IsUUID()
 	sourceId?: string;
-
-	@IsNotEmpty()
-	@MaxLength(9)
 	language: string;
 }
 
-export class AddWordDto extends UpdateWordDto {
-	@IsArray()
-	@Type(() => String)
+export interface AddWordDto extends UpdateWordDto {
 	definitions: string[];
-
-	@IsArray()
-	@Type(() => String)
 	examples: string[];
 }
 
-export class DefinitionDto {
+export interface DefinitionDto {
 	id: string;
 	content: string;
 }
 
-export class UpsertDefinitionDto {
-	@IsNotEmpty()
-	@MaxLength(210)
+export interface UpsertDefinitionDto {
 	content: string;
 }
 
-export class ExampleDto {
+export interface ExampleDto {
 	id: string;
 	content: string;
 }
 
-export class UpsertExampleDto {
-	@IsNotEmpty()
-	@MaxLength(210)
+export interface UpsertExampleDto {
 	content: string;
 }
