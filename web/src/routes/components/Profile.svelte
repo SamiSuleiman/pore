@@ -7,8 +7,7 @@
 	import { Card, Avatar } from 'flowbite-svelte';
 
 	onMount(async () => {
-		await getUserOverview();
-		console.log($userOverview);
+		if ($userOverview === undefined) userOverview.set(await getUserOverview());
 	});
 </script>
 
