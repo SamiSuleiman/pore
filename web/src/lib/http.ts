@@ -10,7 +10,7 @@ export async function get<T>(url: string) {
 	).json() as T;
 }
 
-export async function post(url: string, body: Record<string, unknown>) {
+export async function post<T>(url: string, body: T) {
 	return await fetch(url, {
 		method: 'POST',
 		credentials: 'include',
@@ -31,7 +31,7 @@ export async function del(url: string) {
 	});
 }
 
-export async function put(url: string, body: Record<string, unknown>) {
+export async function put<T>(url: string, body: T) {
 	return await fetch(url, {
 		method: 'PUT',
 		credentials: 'include',
