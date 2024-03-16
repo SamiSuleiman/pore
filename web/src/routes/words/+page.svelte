@@ -2,14 +2,23 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { words, hasError, isLoading, isOpen, selectedWord } from '../../stores/word.store';
+	import {
+		words,
+		hasError,
+		isLoading,
+		isOpen,
+		selectedWord,
+		isUpsertMode,
+	} from '../../stores/word.store';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
 	import { Toast } from 'flowbite-svelte';
-	import { FireSolid } from 'flowbite-svelte-icons';
+	import { FireSolid, PenSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Upsert from './components/Upsert.svelte';
+
+	let modalTitle = '';
 
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
@@ -57,8 +66,19 @@
 		}
 	}
 
-	function onEdit(e: MouseEvent): void {
-		console.log('edit', e);
+	function onEdit(): void {
+		$isUpsertMode = true;
+	}
+
+	function onClose(): void {
+		$isOpen = false;
+		$selectedWord = null;
+		$isUpsertMode = false;
+	}
+
+	$: {
+		if (!$isUpsertMode) modalTitle = 'details';
+		else modalTitle = $selectedWord ? 'edit' : 'add';
 	}
 </script>
 
@@ -93,14 +113,15 @@
 	<Modal
 		color="none"
 		defaultClass="bg-neutral-800 text-white relative flex flex-col mx-auto"
-		title={$isOpen ? 'Edit word' : 'Add word'}
+		title={modalTitle}
 		bind:open={$isOpen}
-		autoclose
-		on:close={() => ($isOpen = false)}
+		on:close={onClose}
 	>
 		<Upsert word={$selectedWord}>
 			<svelte:fragment slot="footer">
-				<Button on:click={onEdit}>I accept</Button>
+				<Button size="sm" on:click={onEdit}>
+					<PenSolid size="sm"></PenSolid>
+				</Button>
 			</svelte:fragment>
 		</Upsert>
 	</Modal>
