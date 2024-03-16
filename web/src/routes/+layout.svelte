@@ -9,7 +9,7 @@
 <Navbar color="none">
 	<NavBrand href="/">
 		<span
-			class="self-center whitespace-nowrap text-xl font-bold font-semibold text-white underline decoration-primary-800 decoration-wavy"
+			class="self-center whitespace-nowrap text-xl font-bold text-white underline decoration-primary-800 decoration-wavy"
 			>pore</span
 		>
 	</NavBrand>

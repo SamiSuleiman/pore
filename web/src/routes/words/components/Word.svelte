@@ -13,10 +13,15 @@
 	function onDelete() {
 		dispatch<ItemActionEvent>('delete', word.id);
 	}
+
+	function onOpen() {
+		dispatch<ItemActionEvent>('open', word.id);
+	}
 </script>
 
 <div transition:fade={{ delay: 100, duration: 100 }} class="flex justify-between p-3 align-middle">
 	<ListgroupItem
+		on:click={onOpen}
 		focusClass="focus:z-40 focus:outline-none focus:ring-2 focus:ring-primary-700 dark:focus:ring-gray-500 dark:focus:text-white"
 		hoverClass="hover:text-primary-700 hover:bg-neutral-900"
 		class="flex justify-between gap-2 border-x-neutral-500 text-base font-semibold"

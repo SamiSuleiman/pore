@@ -10,7 +10,7 @@
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($tags.length === 0) tags.set(await getTags());
+		if ($tags.length === 0) $tags = await getTags();
 		console.log($tags);
 	});
 </script>
