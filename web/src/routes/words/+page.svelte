@@ -1,18 +1,39 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { words } from '../../stores/word.store';
-	import { getWords } from '$lib/word';
+	import { words, error, loading } from '../../stores/word.store';
+	import { deleteWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
+	import { Toast } from 'flowbite-svelte';
+	import { FireSolid } from 'flowbite-svelte-icons';
+	import { Spinner } from 'flowbite-svelte';
 
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($words.length === 0) words.set(await getWords());
-		console.log($words);
+		$error = null;
+		$loading = true;
+
+		if ($words.length === 0) words.set((await getWords()) ?? []);
+
+		$loading = false;
 	});
+
+	async function onDelete(event: CustomEvent<string>): Promise<void> {
+		const _id = event.detail;
+		if (!_id) return;
+
+		const _res = await deleteWord(_id);
+		console.log(_res);
+		if (!_res) {
+			$error = 'an error occurred';
+			return;
+		}
+
+		$words = $words.filter((word) => word.id !== _id);
+	}
 </script>
 
 <div class="w-full bg-neutral-800 sm:p-4">
@@ -21,7 +42,21 @@
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
 		{#each $words as word}
-			<Word {word}></Word>
+			<Word on:delete={onDelete} {word}></Word>
 		{/each}
+		{#if $words.length === 0 && !$loading}
+			<div class="p-4 text-center">no words found</div>
+		{/if}
 	</Listgroup>
+	{#if $error}
+		<Toast on:close={() => ($error = null)} position="bottom-right" color="red">
+			<FireSolid slot="icon" />
+			<span>{$error}</span>
+		</Toast>
+	{/if}
+	{#if $loading}
+		<div class="flex h-32 items-center justify-center">
+			<Spinner class="h-8 w-8 text-primary-500" />
+		</div>
+	{/if}
 </div>

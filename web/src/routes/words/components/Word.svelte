@@ -2,8 +2,16 @@
 	import type { WordPreviewDto } from '$lib/word/model';
 	import { Button, ListgroupItem, Badge } from 'flowbite-svelte';
 	import { TrashBinSolid } from 'flowbite-svelte-icons';
+	import { createEventDispatcher } from 'svelte';
+	import type { ItemActionEvent } from '../../models';
 
 	export let word: WordPreviewDto;
+
+	const dispatch = createEventDispatcher();
+
+	function onDelete() {
+		dispatch<ItemActionEvent>('delete', word.id);
+	}
 </script>
 
 <div class="flex justify-between p-3 align-middle">
@@ -32,7 +40,12 @@
 			<i><small>related/linked to {word.links.length} word(s) </small></i>
 		</div>
 	</ListgroupItem>
-	<Button class="ring-neutral-800 hover:text-primary-700" size="md" color="none">
+	<Button
+		on:click={onDelete}
+		class="ring-neutral-800 hover:text-primary-700"
+		size="md"
+		color="none"
+	>
 		<TrashBinSolid size="md"></TrashBinSolid>
 	</Button>
 </div>

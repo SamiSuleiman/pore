@@ -29,7 +29,5 @@
 			</div>
 			<Button class="w-full" on:click={logout} color="red">logout</Button>
 		</Card>
-	{:else}
-		<p>Loading...</p>
 	{/if}
 </div>
