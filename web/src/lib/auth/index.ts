@@ -4,7 +4,7 @@ import { get } from '$lib/http';
 import { isLoggedIn } from '../../stores/auth.store';
 import type { AuthCookie } from './models';
 
-const TOKEN_KEY = 'PORE_TOKEN';
+const TOKEN_KEY = 'PORE_TOKENS';
 const AUTH_URL = `${env.baseUrl}/auth`;
 
 export function navigateToGithubOAuth(): void {
@@ -32,12 +32,6 @@ export function logout(): void {
 }
 
 export async function refresh(): Promise<void> {
-	//  const _tokens = this.getTokensFromCookie();
-	// if (!_tokens) return EMPTY;
-	//
-	// return this.httpClient
-	//   .get<LoginResDto>(`${this.authConfig.baseUrl}/refresh`)
-	//   .pipe(tap((_tokens) => this.setTokens(_tokens)));
 	const _tokens = extractTokensFromCookie();
 	if (!_tokens) return;
 	const _refreshed = await get<AuthCookie>(`${AUTH_URL}/refresh`);

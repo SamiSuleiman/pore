@@ -2,7 +2,7 @@ export async function get<T>(url: string) {
 	return (
 		await fetch(url, {
 			method: 'GET',
-			credentials: 'same-origin',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -13,7 +13,7 @@ export async function get<T>(url: string) {
 export async function post(url: string, body: Record<string, unknown>) {
 	return await fetch(url, {
 		method: 'POST',
-		credentials: 'same-origin',
+		credentials: 'include',
 		headers: {
 			'Content-Type': 'application/json',
 		},
@@ -24,7 +24,7 @@ export async function post(url: string, body: Record<string, unknown>) {
 export async function del(url: string) {
 	return await fetch(url, {
 		method: 'DELETE',
-		credentials: 'same-origin',
+		credentials: 'include',
 		headers: {
 			'Content-Type': 'application/json',
 		},
@@ -34,7 +34,7 @@ export async function del(url: string) {
 export async function put(url: string, body: Record<string, unknown>) {
 	return await fetch(url, {
 		method: 'PUT',
-		credentials: 'same-origin',
+		credentials: 'include',
 		headers: {
 			'Content-Type': 'application/json',
 		},
