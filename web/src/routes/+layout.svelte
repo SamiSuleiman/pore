@@ -4,7 +4,6 @@
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
 	$: activeUrl = $page.url.pathname;
 	import { isLoggedIn } from '../stores/auth.store';
-	const imgUrl = new URL('../../static/trans.png', import.meta.url).href;
 </script>
 
 <Navbar color="none">
