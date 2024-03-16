@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { words, error, loading, open } from '../../stores/word.store';
-	import { deleteWord, getWords } from '$lib/word';
+	import { words, hasError, isLoading, isOpen, selectedWord } from '../../stores/word.store';
+	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
 	import { Toast } from 'flowbite-svelte';
@@ -11,17 +11,15 @@
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Upsert from './components/Upsert.svelte';
 
-	$: isModalOpen = $open !== null;
-
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		$error = null;
-		$loading = true;
+		$hasError = null;
+		$isLoading = true;
 
 		if ($words.length === 0) $words = (await getWords()) ?? [];
 
-		$loading = false;
+		$isLoading = false;
 	});
 
 	async function onDelete(event: CustomEvent<string>): Promise<void> {
@@ -38,9 +36,29 @@
 	}
 
 	async function onOpen(event: CustomEvent<string>): Promise<void> {
+		$isOpen = true;
+
 		const _id = event.detail;
-		if (!_id) return;
-		$open = _id;
+		if (!_id) {
+			// here is for adding a new word
+		} else {
+			$isLoading = true;
+			$hasError = null;
+
+			const _word = await getWord(_id);
+
+			if (!_word) {
+				$hasError = 'an error occurred';
+				return;
+			}
+
+			$isLoading = false;
+			$selectedWord = _word;
+		}
+	}
+
+	function onEdit(e: MouseEvent): void {
+		console.log('edit', e);
 	}
 </script>
 
@@ -52,31 +70,37 @@
 		{#each $words as word}
 			<Word on:open={onOpen} on:delete={onDelete} {word}></Word>
 		{/each}
-		{#if $words.length === 0 && !$loading}
+		{#if $words.length === 0 && !$isLoading}
 			<div class="p-4 text-center">no words found</div>
 		{/if}
 	</Listgroup>
-	{#if $error}
+	{#if $hasError}
 		<Toast
 			divClass="w-full max-w-xs p-4 text-white bg-primary-900 shadow gap-3"
-			on:close={() => ($error = null)}
+			on:close={() => ($hasError = null)}
 			position="bottom-right"
 			color="red"
 		>
 			<FireSolid slot="icon" />
-			<span>{$error}</span>
+			<span>{$hasError}</span>
 		</Toast>
 	{/if}
-	{#if $loading}
+	{#if $isLoading}
 		<div class="flex h-32 items-center justify-center">
 			<Spinner class="h-8 w-8 text-primary-500" />
 		</div>
 	{/if}
-	<Modal title="Terms of Service" bind:open={isModalOpen} autoclose on:close={() => ($open = null)}>
-		<Upsert>
+	<Modal
+		color="none"
+		defaultClass="bg-neutral-800 text-white relative flex flex-col mx-auto"
+		title={$isOpen ? 'Edit word' : 'Add word'}
+		bind:open={$isOpen}
+		autoclose
+		on:close={() => ($isOpen = false)}
+	>
+		<Upsert word={$selectedWord}>
 			<svelte:fragment slot="footer">
-				<Button on:click={() => alert('Handle "success"')}>I accept</Button>
-				<Button color="alternative">Decline</Button>
+				<Button on:click={onEdit}>I accept</Button>
 			</svelte:fragment>
 		</Upsert>
 	</Modal>
