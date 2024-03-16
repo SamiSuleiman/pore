@@ -35,11 +35,11 @@
 		const _id = event.detail;
 		if (!_id) return;
 
-		// const _res = await deleteWord(_id);
-		// if (!_res) {
-		// 	$error = 'an error occurred';
-		// 	return;
-		// }
+		const _res = await deleteWord(_id);
+		if (!_res) {
+			$hasError = 'an error occurred';
+			return;
+		}
 
 		$words = $words.filter((word) => word.id !== _id);
 	}
