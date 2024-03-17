@@ -1,9 +1,15 @@
 <script lang="ts">
 	import type { WordDto } from '$lib/word/model';
-	import { AccordionItem, Accordion } from 'flowbite-svelte';
-	import { BookSolid } from 'flowbite-svelte-icons';
+	import { AccordionItem, Accordion, ArrowKeyLeft, ArrowKeyRight } from 'flowbite-svelte';
+	import { ArrowRightSolid, BookSolid } from 'flowbite-svelte-icons';
 
 	export let word: WordDto;
+
+	function getLinkOtherWords(linkId: string) {
+		return (
+			word.links.find((link) => link.id === linkId)?.words.filter((w) => w.id !== word.id) ?? []
+		);
+	}
 
 	let accordionOpts = {
 		borderOpenClass: 'border-b-primary-800 border-dotted',
@@ -60,6 +66,12 @@
 							{definition.content}
 						</p>
 					{/each}
+					{#if word.definitions.length === 0}
+						<p class="text-gray-500">
+							no definitions
+							<i class="text-primary-800">.</i>
+						</p>
+					{/if}
 				</div>
 			</div>
 			<div class="flex flex-col gap-3">
@@ -71,8 +83,44 @@
 							{example.content}
 						</p>
 					{/each}
+					{#if word.examples.length === 0}
+						<p class="text-gray-500">
+							no examples
+							<i class="text-primary-800">.</i>
+						</p>
+					{/if}
 				</div>
 			</div>
+		</div>
+	</AccordionItem>
+	<AccordionItem
+		borderOpenClass={accordionOpts.borderOpenClass}
+		borderClass={accordionOpts.borderClass}
+	>
+		<span slot="header" class={accordionOpts.headerClass}>links</span>
+		<div class="flex flex-col gap-10">
+			{#each word.links as link}
+				<div>
+					<p>
+						<i class="text-primary-800">- </i>
+						<span>
+							{link.title}
+							<ArrowRightSolid class="inline text-center"></ArrowRightSolid>
+							{#each getLinkOtherWords(link.id) as word}
+								<span>
+									{word.content}
+								</span>
+							{/each}
+							{#if word.links.length === 0}
+								<p class="text-gray-500">
+									no links
+									<i class="text-primary-800">.</i>
+								</p>
+							{/if}
+						</span>
+					</p>
+				</div>
+			{/each}
 		</div>
 	</AccordionItem>
 </Accordion>
