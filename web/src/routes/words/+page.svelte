@@ -14,10 +14,12 @@
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
 	import { Toast } from 'flowbite-svelte';
-	import { FireSolid, PenSolid } from 'flowbite-svelte-icons';
+	import { FireSolid, PenSolid, UndoSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Upsert from './components/Upsert.svelte';
 
+	const upsertBtnStyle =
+		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
 	let modalTitle = '';
 
 	onMount(async () => {
@@ -64,10 +66,6 @@
 			$isLoading = false;
 			$selectedWord = _word;
 		}
-	}
-
-	function onEdit(): void {
-		$isUpsertMode = true;
 	}
 
 	function onClose(): void {
@@ -118,8 +116,13 @@
 		on:close={onClose}
 	>
 		<Upsert word={$selectedWord}>
-			<svelte:fragment slot="footer">
-				<Button size="sm" on:click={onEdit}>
+			<svelte:fragment slot="upsertMode">
+				<Button size="sm" on:click={() => ($isUpsertMode = false)} outline class={upsertBtnStyle}>
+					<UndoSolid size="sm"></UndoSolid>
+				</Button>
+			</svelte:fragment>
+			<svelte:fragment slot="detailMode">
+				<Button size="sm" on:click={() => ($isUpsertMode = true)} outline class={upsertBtnStyle}>
 					<PenSolid size="sm"></PenSolid>
 				</Button>
 			</svelte:fragment>
