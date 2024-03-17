@@ -6,7 +6,7 @@ import {
   MaxLength,
   isUUID,
 } from 'class-validator';
-import { LinkPreviewDto } from '../link/link.dto';
+import { LinkDto, LinkPreviewDto } from '../link/link.dto';
 import { SourcePreviewDto } from '../source/source.dto';
 import { TagPreviewDto } from '../tag/tag.dto';
 import { DefinitionDto } from './definition.dto';
@@ -24,6 +24,7 @@ export class WordPreviewDto {
 export class WordDto extends WordPreviewDto {
   definitions: DefinitionDto[];
   examples: ExampleDto[];
+  links: LinkDto[];
 }
 
 export class UpdateWordDto {

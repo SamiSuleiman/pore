@@ -1,4 +1,4 @@
-import type { LinkPreviewDto } from '$lib/link/model';
+import type { LinkDto, LinkPreviewDto } from '$lib/link/model';
 import type { SourcePreviewDto } from '$lib/source/model';
 import type { TagPreviewDto } from '$lib/tag/model';
 
@@ -14,6 +14,7 @@ export interface WordPreviewDto {
 export interface WordDto extends WordPreviewDto {
 	definitions: DefinitionDto[];
 	examples: ExampleDto[];
+	links: LinkDto[];
 }
 
 export interface UpdateWordDto {

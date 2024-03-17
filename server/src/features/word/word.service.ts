@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Definition } from 'src/core/entities/definition.entity';
 import { Example } from 'src/core/entities/example.entity';
@@ -41,7 +41,9 @@ export class WordService {
       where: { id, userId: ownerId },
       relations: {
         tags: true,
-        links: true,
+        links: {
+          words: true,
+        },
         source: true,
         definitions: true,
         examples: true,

@@ -13,8 +13,8 @@ export class WordMapper {
     return {
       id: word.id,
       content: word.content,
-      tags: word.tags.map((tag) => TagMapper.toPreview(tag)),
-      links: word.links.map((link) => LinkMapper.toPreview(link)),
+      tags: word.tags?.map((tag) => TagMapper.toPreview(tag)),
+      links: word.links?.map((link) => LinkMapper.toPreview(link)),
       source: word.source ? SourceMapper.toPreview(word.source) : undefined,
       language: word.language,
     };
@@ -29,7 +29,7 @@ export class WordMapper {
       ),
       examples: word.examples.map((example) => ExampleMapper.toDto(example)),
       tags: word.tags.map((tag) => TagMapper.toPreview(tag)),
-      links: word.links.map((link) => LinkMapper.toPreview(link)),
+      links: word.links.map((link) => LinkMapper.toDto(link)),
       source: word.source ? SourceMapper.toPreview(word.source) : undefined,
       language: word.language,
     };
