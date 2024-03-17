@@ -20,7 +20,7 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $links as link}
+		{#each $links as link (link.id)}
 			<Link {link}></Link>
 		{/each}
 	</Listgroup>

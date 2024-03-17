@@ -92,7 +92,7 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $words as word}
+		{#each $words as word (word.id)}
 			<Word on:open={onOpen} on:delete={onDelete} {word}></Word>
 		{/each}
 		{#if $words.length === 0 && !$isLoading}

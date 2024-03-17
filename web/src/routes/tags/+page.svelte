@@ -20,7 +20,7 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $tags as tag}
+		{#each $tags as tag (tag.id)}
 			<Tag {tag}></Tag>
 		{/each}
 	</Listgroup>

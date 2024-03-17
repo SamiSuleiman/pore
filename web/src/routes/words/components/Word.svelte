@@ -32,7 +32,7 @@
 				<p>{word.language}</p>
 			</div>
 			<div class="flex flex-wrap gap-3">
-				{#each word.tags as tag}
+				{#each word.tags as tag (tag.id)}
 					<Badge
 						color="none"
 						class="rounded-none bg-neutral-800 p-1 text-gray-300 ring-1 ring-primary-900"

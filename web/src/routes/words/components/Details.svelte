@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { WordDto } from '$lib/word/model';
-	import { AccordionItem, Accordion, ArrowKeyLeft, ArrowKeyRight } from 'flowbite-svelte';
+	import { AccordionItem, Accordion } from 'flowbite-svelte';
 	import { ArrowRightSolid, BookSolid } from 'flowbite-svelte-icons';
 
 	export let word: WordDto;
@@ -60,7 +60,7 @@
 			<div class="flex flex-col gap-3">
 				<h1 class="underline decoration-wavy">definitions</h1>
 				<div>
-					{#each word.definitions as definition}
+					{#each word.definitions as definition (definition.id)}
 						<p>
 							<i class="text-primary-800">- </i>
 							{definition.content}
@@ -77,7 +77,7 @@
 			<div class="flex flex-col gap-3">
 				<h1 class="underline decoration-wavy">examples</h1>
 				<div>
-					{#each word.examples as example}
+					{#each word.examples as example (example.id)}
 						<p>
 							<i class="text-primary-800">- </i>
 							{example.content}
@@ -99,14 +99,14 @@
 	>
 		<span slot="header" class={accordionOpts.headerClass}>links</span>
 		<div class="flex flex-col gap-10">
-			{#each word.links as link}
+			{#each word.links as link (link.id)}
 				<div>
 					<p>
 						<i class="text-primary-800">- </i>
 						<span>
 							{link.title}
 							<ArrowRightSolid class="inline text-center"></ArrowRightSolid>
-							{#each getLinkOtherWords(link.id) as word}
+							{#each getLinkOtherWords(link.id) as word (word.id)}
 								<span>
 									{word.content}
 								</span>

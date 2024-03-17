@@ -20,7 +20,7 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $sources as source}
+		{#each $sources as source (source.id)}
 			<Source {source}></Source>
 		{/each}
 	</Listgroup>
