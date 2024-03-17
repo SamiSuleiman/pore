@@ -7,7 +7,6 @@
 	export let word: WordDto | null = null;
 
 	$: {
-		console.log(word);
 	}
 </script>
 

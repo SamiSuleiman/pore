@@ -11,7 +11,6 @@
 		if (!$isLoggedIn) goto('/');
 
 		if ($sources.length === 0) $sources = await getSources();
-		console.log($sources);
 	});
 </script>
 

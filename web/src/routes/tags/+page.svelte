@@ -11,7 +11,6 @@
 		if (!$isLoggedIn) goto('/');
 
 		if ($tags.length === 0) $tags = await getTags();
-		console.log($tags);
 	});
 </script>
 

@@ -11,7 +11,6 @@
 		if (!$isLoggedIn) goto('/');
 
 		if ($links.length === 0) $links = await getLinks();
-		console.log($links);
 	});
 </script>
 
