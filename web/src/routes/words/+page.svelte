@@ -16,7 +16,7 @@
 	import { Toast } from 'flowbite-svelte';
 	import { FireSolid, PenSolid, UndoSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
-	import Upsert from './components/Upsert.svelte';
+	import Open from './components/Open.svelte';
 
 	const upsertBtnStyle =
 		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
@@ -122,7 +122,7 @@
 		bind:open={$isOpen}
 		on:close={onClose}
 	>
-		<Upsert word={$selectedWord}>
+		<Open word={$selectedWord}>
 			<svelte:fragment slot="upsertMode">
 				<Button size="sm" on:click={() => ($isUpsertMode = false)} outline class={upsertBtnStyle}>
 					<UndoSolid size="sm"></UndoSolid>
@@ -133,6 +133,6 @@
 					<PenSolid size="sm"></PenSolid>
 				</Button>
 			</svelte:fragment>
-		</Upsert>
+		</Open>
 	</Modal>
 </div>
