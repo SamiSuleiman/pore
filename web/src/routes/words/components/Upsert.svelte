@@ -15,12 +15,8 @@
 		{#if word}
 			<slot class="bg-neutral-800 text-white" name="upsertMode" />
 		{/if}
-		<!--  we show the form here -->
-	{:else}
-		<!--  we show the details here -->
-		{#if word}
-			<slot class="bg-neutral-800 text-white" name="detailMode" />
-			<Details {word}></Details>
-		{/if}
+	{:else if word}
+		<slot class="bg-neutral-800 text-white" name="detailMode" />
+		<Details {word}></Details>
 	{/if}
 </div>

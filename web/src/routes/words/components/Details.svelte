@@ -1,12 +1,14 @@
 <script lang="ts">
 	import type { WordDto } from '$lib/word/model';
 	import { AccordionItem, Accordion } from 'flowbite-svelte';
+	import { BookSolid } from 'flowbite-svelte-icons';
 
 	export let word: WordDto;
 
 	let accordionOpts = {
 		borderOpenClass: 'border-b-primary-800 border-dotted',
 		borderClass: 'border-none',
+		headerClass: 'text-lg underline decoration-primary-800 decoration-wavy',
 	};
 </script>
 
@@ -20,18 +22,34 @@
 		borderOpenClass={accordionOpts.borderOpenClass}
 		borderClass={accordionOpts.borderClass}
 	>
-		<span slot="header" class="underline decoration-primary-800 decoration-wavy">meta</span>
-		<p>
+		<span slot="header" class={accordionOpts.headerClass}>meta</span>
+		<h1 class="mb-4 text-xl text-white">
+			<BookSolid class="inline text-center text-primary-800"></BookSolid>
 			{word.content}
+		</h1>
+		<p>
+			language
+			<span class="text-primary-800">: </span>
+			<span class="text-white">
+				{word.language}
+			</span>
+		</p>
+		<p>
+			source <span class="text-primary-800">: </span>
+			<span class="text-white">
+				{word.source?.type}
+			</span>
+			<i class="text-primary-800"> - </i>
+			<span class="text-white">
+				{word.source?.content}
+			</span>
 		</p>
 	</AccordionItem>
 	<AccordionItem
 		borderOpenClass={accordionOpts.borderOpenClass}
 		borderClass={accordionOpts.borderClass}
 	>
-		<span slot="header" class="underline decoration-primary-800 decoration-wavy"
-			>definitions & examples</span
-		>
+		<span slot="header" class={accordionOpts.headerClass}>definitions & examples</span>
 		<div class="flex flex-col gap-10">
 			<div class="flex flex-col gap-3">
 				<h1 class="underline decoration-wavy">definitions</h1>
