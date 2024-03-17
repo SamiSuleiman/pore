@@ -14,7 +14,7 @@
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
 	import { Toast } from 'flowbite-svelte';
-	import { FireSolid, PenSolid, UndoSolid } from 'flowbite-svelte-icons';
+	import { FireSolid, PenSolid, UndoSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Upsert from './components/Upsert.svelte';
 
@@ -46,12 +46,12 @@
 		$words = $words.filter((word) => word.id !== _id);
 	}
 
-	async function onOpen(event: CustomEvent<string>): Promise<void> {
+	async function onOpen(event?: CustomEvent<string>): Promise<void> {
 		$isOpen = true;
 
-		const _id = event.detail;
+		const _id = event?.detail;
 		if (!_id) {
-			// here is for adding a new word
+			$isUpsertMode = true;
 		} else {
 			$isLoading = true;
 			$hasError = null;
@@ -80,7 +80,14 @@
 	}
 </script>
 
-<div class="w-full bg-neutral-800 sm:p-4">
+<div class="flex w-full flex-col bg-neutral-800 sm:p-4">
+	<Button
+		on:click={() => onOpen()}
+		color="none"
+		class="text-primary-900 ring-neutral-800 hover:text-primary-700"
+	>
+		<PlusSolid></PlusSolid>
+	</Button>
 	<Listgroup
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
