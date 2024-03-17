@@ -17,7 +17,12 @@
 			size="none"
 			class="flex items-center gap-4 border-transparent bg-transparent shadow-transparent"
 		>
-			<Avatar src={$userOverview.avatar} size="xl" rounded />
+			<div class="flex flex-col gap-3">
+				<Button class="w-full font-bold" outline size="xs" on:click={logout} color="red"
+					>logout</Button
+				>
+				<Avatar src={$userOverview.avatar} size="xl" rounded />
+			</div>
 			<div>
 				<h5 class="bg-neutral-800 text-white">welcome, {$userOverview.name}</h5>
 				<div class="pt-4">
@@ -27,7 +32,6 @@
 					<p>source count: {$userOverview.sourceCount}</p>
 				</div>
 			</div>
-			<Button class="w-full" on:click={logout} color="red">logout</Button>
 		</Card>
 	{/if}
 </div>
