@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Label, Input, Helper } from 'flowbite-svelte';
+	import { Label, Select, Helper } from 'flowbite-svelte';
 	import type { InputValidator } from './input';
 
 	export let label = '';
 	export let value = '';
+	export let choices: any[] = [];
 	export let validator: InputValidator | undefined = undefined;
 
 	$: hasErr = !!validator?.errMsg && validator?.isTouched;
@@ -22,7 +23,8 @@
 			>
 		{/if}
 	</Label>
-	<Input
+	<Select
+		items={choices}
 		class="bg-neutral-800 text-white"
 		size="sm"
 		color={hasErr ? 'red' : 'base'}

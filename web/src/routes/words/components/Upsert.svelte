@@ -5,6 +5,8 @@
 	import { required } from '../../shared/validators';
 	import type { InputValidator } from '../../shared/input';
 	import Input from '../../shared/Input.svelte';
+	import Select from '../../shared/Select.svelte';
+	import { languages } from '../index';
 
 	export let word: WordDto | null = null;
 
@@ -23,6 +25,11 @@
 			errMsg: '',
 			isTouched: false,
 		},
+		language: {
+			fn: required,
+			errMsg: '',
+			isTouched: false,
+		},
 	};
 
 	$: {
@@ -31,9 +38,16 @@
 			// @ts-ignore
 			validator.errMsg = validator.fn(form[key as any]);
 			validators = { ...validators, [key]: validator };
-
-			console.log(validator.errMsg);
 		}
+	}
+
+	$: {
+		form.content = word?.content || '';
+		form.language = word?.language || 'en';
+		form.tagIds = word?.tags.map((tag) => tag.id) || [];
+		form.linkIds = word?.links.map((link) => link.id) || [];
+		form.definitions = word?.definitions.map((def) => def.content) || [];
+		form.examples = word?.examples.map((def) => def.content) || [];
 	}
 
 	function onSubmit(): void {
@@ -48,6 +62,12 @@
 	<form class="flex flex-col" method="POST" on:submit|preventDefault>
 		<div class="mb-6">
 			<Input label="content" bind:value={form.content} validator={validators.content}></Input>
+			<Select
+				choices={languages}
+				label="language"
+				bind:value={form.language}
+				validator={validators.language}
+			></Select>
 		</div>
 		<Button
 			on:click={() => onSubmit()}
