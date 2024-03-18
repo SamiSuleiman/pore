@@ -7,12 +7,13 @@
 	import Input from '../../shared/Input.svelte';
 	import Select from '../../shared/Select.svelte';
 	import { languages } from '../index';
+	import { onMount } from 'svelte';
 
 	export let word: WordDto | null = null;
 
 	const form: AddWordDto = {
 		content: '',
-		language: 'en',
+		language: 'English',
 		tagIds: [],
 		linkIds: [],
 		definitions: [],
@@ -41,17 +42,17 @@
 		}
 	}
 
-	$: {
+	onMount(() => {
 		form.content = word?.content || '';
-		form.language = word?.language || 'en';
+		form.language = word?.language ?? 'English';
 		form.tagIds = word?.tags.map((tag) => tag.id) || [];
 		form.linkIds = word?.links.map((link) => link.id) || [];
 		form.definitions = word?.definitions.map((def) => def.content) || [];
-		form.examples = word?.examples.map((def) => def.content) || [];
-	}
+		form.examples = word?.examples.map((ex) => ex.content) || [];
+	});
 
 	function onSubmit(): void {
-		console.log('submitting form');
+		console.log(form);
 	}
 </script>
 
