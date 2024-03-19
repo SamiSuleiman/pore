@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { AddWordDto, WordDto } from '$lib/word/model';
-	import { Button } from 'flowbite-svelte';
+	import { Button, Spinner } from 'flowbite-svelte';
 	import { CheckSolid } from 'flowbite-svelte-icons';
 	import { required } from '../../shared/validators';
 	import type { InputValidator } from '../../shared/input';
@@ -75,7 +75,9 @@
 </script>
 
 {#await getRelated()}
-	<p>...waiting</p>
+	<div class="flex h-32 items-center justify-center">
+		<Spinner class="h-8 w-8 text-primary-500" />
+	</div>
 {:then related}
 	<div class="flex flex-col gap-2">
 		{#if word}
