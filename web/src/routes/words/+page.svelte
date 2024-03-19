@@ -9,6 +9,7 @@
 		isOpen,
 		selectedWord,
 		isUpsertMode,
+		isOutdated,
 	} from '../../stores/word.store';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
@@ -28,7 +29,7 @@
 		$hasError = null;
 		$isLoading = true;
 
-		if ($words.length === 0) $words = (await getWords()) ?? [];
+		if ($words.length === 0 || $isOutdated) $words = (await getWords()) ?? [];
 
 		$isLoading = false;
 	});
