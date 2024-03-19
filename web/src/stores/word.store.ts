@@ -7,3 +7,4 @@ export const isLoading = writable<boolean>(false);
 export const isOpen = writable<boolean>(false);
 export const isUpsertMode = writable<boolean>(false);
 export const selectedWord = writable<WordDto | null>(null);
+export const isOutdated = writable<boolean>(false);
