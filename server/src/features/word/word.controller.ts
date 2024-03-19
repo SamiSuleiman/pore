@@ -12,7 +12,7 @@ import {
 import { WordService } from './word.service';
 import { Roles } from 'src/core/guards/roles.decorator';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
-import { AddWordDto, UpdateWordDto, WordDto, WordPreviewDto } from './word.dto';
+import { UpsertWordDto, WordDto, WordPreviewDto } from './word.dto';
 import { JwtPayload } from 'src/core/auth.model';
 
 @Roles('admin', 'user')
@@ -38,7 +38,7 @@ export class WordController {
 
   @Post()
   async create(
-    @Body() body: AddWordDto,
+    @Body() body: UpsertWordDto,
     @Req() req: Request & { user: JwtPayload },
   ): Promise<void> {
     await this.wordService.create(body, req.user.sub);
@@ -48,7 +48,7 @@ export class WordController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() body: UpdateWordDto,
+    @Body() body: UpsertWordDto,
     @Req() req: Request & { user: JwtPayload },
   ): Promise<void> {
     await this.wordService.update(id, body, req.user.sub);

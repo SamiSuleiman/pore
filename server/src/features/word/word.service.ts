@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Definition } from 'src/core/entities/definition.entity';
 import { Example } from 'src/core/entities/example.entity';
@@ -8,7 +8,7 @@ import { Tag } from 'src/core/entities/tag.entity';
 import { Word } from 'src/core/entities/word.entity';
 import { WordMapper } from 'src/core/mappers/word.mapper';
 import { In, Repository } from 'typeorm';
-import { WordPreviewDto, WordDto, AddWordDto, UpdateWordDto } from './word.dto';
+import { WordPreviewDto, WordDto, UpsertWordDto } from './word.dto';
 
 @Injectable()
 export class WordService {
@@ -53,7 +53,7 @@ export class WordService {
     return WordMapper.toDto(_word);
   }
 
-  async create(dto: AddWordDto, userId: string): Promise<Word> {
+  async create(dto: UpsertWordDto, userId: string): Promise<Word> {
     const { tags, source, links } = await this.getRelations(dto);
 
     const _word = await this.wordRepo.save(
@@ -92,7 +92,7 @@ export class WordService {
     };
   }
 
-  async update(id: string, dto: UpdateWordDto, ownerId: string): Promise<Word> {
+  async update(id: string, dto: UpsertWordDto, ownerId: string): Promise<Word> {
     const _word = await this.wordRepo.findOneOrFail({
       where: { id, userId: ownerId },
       relations: {
@@ -110,14 +110,42 @@ export class WordService {
     _word.links = links;
     _word.source = source;
 
-    return await this.wordRepo.save(_word);
+    // todo: this is a garbage workaround for a simple problem,
+    // there are better ways, i think this is a common problem and can be solved better?
+    await this.definitionRepo.delete({ wordId: _word.id });
+    await this.exampleRepo.delete({ wordId: _word.id });
+
+    const _definitions = await this.definitionRepo.save(
+      this.definitionRepo.create(
+        dto.definitions.map((content) => ({
+          content,
+          wordId: _word.id,
+        })),
+      ),
+    );
+
+    const _examples = await this.exampleRepo.save(
+      this.exampleRepo.create(
+        dto.examples.map((content) => ({
+          content,
+          wordId: _word.id,
+        })),
+      ),
+    );
+
+    return await this.wordRepo.save({
+      ..._word,
+      definitions: _definitions,
+      examples: _examples,
+    });
+    // return await this.wordRepo.save(_word);
   }
 
   async remove(id: string, ownerId: string): Promise<void> {
     await this.wordRepo.delete({ id, userId: ownerId });
   }
 
-  private async getRelations(dto: AddWordDto | UpdateWordDto): Promise<{
+  private async getRelations(dto: UpsertWordDto | UpsertWordDto): Promise<{
     tags: Tag[];
     source: Source | null;
     links: Link[];

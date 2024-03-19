@@ -27,7 +27,7 @@ export class WordDto extends WordPreviewDto {
   links: LinkDto[];
 }
 
-export class UpdateWordDto {
+export class UpsertWordDto {
   @IsNotEmpty()
   @MaxLength(60)
   content: string;
@@ -45,9 +45,7 @@ export class UpdateWordDto {
   @IsNotEmpty()
   @MaxLength(9)
   language: string;
-}
 
-export class AddWordDto extends UpdateWordDto {
   @IsArray()
   @Type(() => String)
   definitions: string[];

@@ -12,7 +12,7 @@ import { Word } from 'src/core/entities/word.entity';
 import { DataModule } from 'src/data/data.module';
 import { UserDto } from 'src/user/user.dto';
 import { UserService } from 'src/user/user.service';
-import { AddWordDto, UpdateWordDto } from './word.dto';
+import { AddWordDto, UpsertWordDto } from './word.dto';
 
 describe('UserService', () => {
   let _moduleRef: TestingModule;
@@ -362,7 +362,7 @@ describe('UserService', () => {
       const _result = await _wordService.create(_addWordDto, _user.id);
       expect(_result).toBeDefined();
 
-      const _updateWordDto: UpdateWordDto = {
+      const _updateWordDto: UpsertWordDto = {
         content: 'updated test',
         tagIds: [_tagId],
         linkIds: [_linkId],
@@ -428,7 +428,7 @@ describe('UserService', () => {
       const _result = await _wordService.create(_addWordDto, _user.id);
       expect(_result).toBeDefined();
 
-      const _updateWordDto: UpdateWordDto = {
+      const _updateWordDto: UpsertWordDto = {
         content: 'updated test',
         tagIds: [],
         linkIds: [],
