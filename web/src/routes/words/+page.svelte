@@ -118,7 +118,7 @@
 	{/if}
 	<Modal
 		color="none"
-		defaultClass="bg-neutral-800 text-white relative flex flex-col mx-auto"
+		defaultClass="max-h-full bg-neutral-800 text-white relative flex flex-col mx-auto"
 		title={modalTitle}
 		bind:open={$isOpen}
 		on:close={onClose}

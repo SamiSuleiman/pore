@@ -25,7 +25,7 @@
 	</Label>
 	<MultiSelect
 		items={choices}
-		class="bg-neutral-800 text-white"
+		dropdownClass="bg-neutral-800 text-white [&>*]:bg-neutral-800 [&>*]:text-white [&>*:hover]:hover:bg-primary-900 [&>*:hover]:hover:text-white"
 		size="sm"
 		color={hasErr ? 'red' : 'base'}
 		bind:value

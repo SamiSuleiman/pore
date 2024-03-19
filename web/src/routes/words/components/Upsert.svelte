@@ -16,6 +16,7 @@
 	import { getLinks } from '$lib/link';
 	import { getSources } from '$lib/source';
 	import type { SourcePreviewDto } from '$lib/source/model';
+	import MultiSelect from '../../shared/MultiSelect.svelte';
 
 	export let word: WordDto | null = null;
 
@@ -97,6 +98,16 @@
 					label="source"
 					bind:value={form.sourceId}
 				></Select>
+				<MultiSelect
+					choices={related.tags.map((s) => ({ value: s.id, name: s.title }))}
+					label="tags"
+					bind:value={form.tagIds}
+				></MultiSelect>
+				<MultiSelect
+					choices={related.links.map((s) => ({ value: s.id, name: s.title }))}
+					label="links"
+					bind:value={form.linkIds}
+				></MultiSelect>
 			</div>
 			<Button
 				on:click={() => onSubmit()}
