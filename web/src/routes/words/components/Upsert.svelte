@@ -123,23 +123,21 @@
 		<form class="flex flex-col" method="POST" on:submit|preventDefault>
 			<div>
 				<div class="mb-4 flex">
-					<span class="text-primary-800">* </span>
 					<div class="flex-1">
 						<Input
 							disabled={isSubmitting}
-							label="content"
+							label="content*"
 							bind:value={form.content}
 							validator={validators.content}
 						></Input>
 					</div>
 				</div>
 				<div class="mb-4 flex">
-					<span class="text-primary-800">* </span>
 					<div class="flex-1">
 						<Select
 							disabled={isSubmitting}
 							choices={languages.map((lang) => ({ value: lang, name: lang }))}
-							label="language"
+							label="language*"
 							bind:value={form.language}
 							validator={validators.language}
 						></Select>
