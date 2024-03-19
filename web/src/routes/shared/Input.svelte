@@ -5,6 +5,7 @@
 	export let label = '';
 	export let value = '';
 	export let validator: InputValidator | undefined = undefined;
+	export let disabled = false;
 
 	$: hasErr = !!validator?.errMsg && validator?.isTouched;
 </script>
@@ -25,6 +26,7 @@
 		</Label>
 	{/if}
 	<Input
+		{disabled}
 		class="border-gray-600 bg-neutral-800 text-white"
 		size="sm"
 		color={hasErr ? 'red' : 'base'}

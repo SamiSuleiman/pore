@@ -6,6 +6,7 @@
 	export let value = '';
 	export let choices: any[] = [];
 	export let validator: InputValidator | undefined = undefined;
+	export let disabled = false;
 
 	$: hasErr = !!validator?.errMsg && validator?.isTouched;
 </script>
@@ -24,6 +25,7 @@
 		{/if}
 	</Label>
 	<Select
+		{disabled}
 		items={choices}
 		class="border-gray-600 bg-neutral-800 text-white"
 		size="sm"

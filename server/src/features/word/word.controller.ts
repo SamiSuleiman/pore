@@ -42,6 +42,7 @@ export class WordController {
     @Req() req: Request & { user: JwtPayload },
   ): Promise<void> {
     await this.wordService.create(body, req.user.sub);
+    await new Promise((resolve) => setTimeout(resolve, 5000));
   }
 
   @Put(':id')

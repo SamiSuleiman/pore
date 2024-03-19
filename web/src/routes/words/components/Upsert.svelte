@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { AddWordDto, WordDto } from '$lib/word/model';
-	import { Button, Spinner } from 'flowbite-svelte';
+	import type { AddWordDto, UpdateWordDto, WordDto } from '$lib/word/model';
+	import { Alert, Button, Spinner } from 'flowbite-svelte';
 	import { CheckSolid, TrashBinSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { required } from '../../shared/validators';
 	import type { InputValidator } from '../../shared/input';
@@ -9,16 +9,16 @@
 	import { languages } from '../index';
 	import type { TagPreviewDto } from '$lib/tag/model';
 	import type { LinkPreviewDto } from '$lib/link/model';
-	import { tags } from '../../../stores/tag.store';
-	import { links } from '../../../stores/link.store';
-	import { sources } from '../../../stores/source.store';
 	import { getTags } from '$lib/tag';
 	import { getLinks } from '$lib/link';
 	import { getSources } from '$lib/source';
 	import type { SourcePreviewDto } from '$lib/source/model';
 	import MultiSelect from '../../shared/MultiSelect.svelte';
+	import { addWord, updateWord } from '$lib/word';
+	import { isOutdated } from '../../../stores/word.store';
 
 	export let word: WordDto | null = null;
+	const invalidFormErrMsg = 'please fill in all required fields.';
 
 	let form: AddWordDto = {
 		content: '',
@@ -52,16 +52,45 @@
 		}
 	}
 
-	form.content = word?.content || '';
+	$: formError = Object.values(validators).some((v) => v.errMsg !== '' && v.isTouched)
+		? invalidFormErrMsg
+		: '';
+
+	let isSubmitting = false;
+
+	form.content = word?.content ?? '';
 	form.language = word?.language ?? 'English';
-	form.sourceId = word?.source?.id || '';
+	form.sourceId = word?.source?.id;
 	form.tagIds = word?.tags.map((tag) => tag.id) || [];
 	form.linkIds = word?.links.map((link) => link.id) || [];
 	form.definitions = word?.definitions.map((def) => def.content) || [];
 	form.examples = word?.examples.map((ex) => ex.content) || [];
 
-	function onSubmit(): void {
-		console.log(form);
+	async function onSubmit(): Promise<void> {
+		isSubmitting = true;
+		formError = '';
+		if (Object.values(validators).some((v) => v.errMsg !== '')) {
+			formError = invalidFormErrMsg;
+			isSubmitting = false;
+			return;
+		}
+
+		const toSubmit = {
+			...form,
+			definitions: form.definitions.filter((def) => def !== ''),
+			examples: word ? form.examples.filter((ex) => ex !== '') : null,
+			sourceId: word ? (form.sourceId === '' ? null : form.sourceId) : null,
+		};
+
+		console.log(toSubmit);
+
+		let res;
+		if (!word) res = await addWord(toSubmit as AddWordDto);
+		else res = await updateWord(word.id, toSubmit as UpdateWordDto);
+		isSubmitting = false;
+
+		if (res) $isOutdated = true;
+		else formError = 'something went wrong';
 	}
 
 	async function getRelated(): Promise<{
@@ -86,19 +115,32 @@
 		{/if}
 		<form class="flex flex-col" method="POST" on:submit|preventDefault>
 			<div>
-				<div class="mb-4">
-					<Input label="content" bind:value={form.content} validator={validators.content}></Input>
+				<div class="mb-4 flex">
+					<span class="text-primary-800">* </span>
+					<div class="flex-1">
+						<Input
+							disabled={isSubmitting}
+							label="content"
+							bind:value={form.content}
+							validator={validators.content}
+						></Input>
+					</div>
+				</div>
+				<div class="mb-4 flex">
+					<span class="text-primary-800">* </span>
+					<div class="flex-1">
+						<Select
+							disabled={isSubmitting}
+							choices={languages.map((lang) => ({ value: lang, name: lang }))}
+							label="language"
+							bind:value={form.language}
+							validator={validators.language}
+						></Select>
+					</div>
 				</div>
 				<div class="mb-4">
 					<Select
-						choices={languages.map((lang) => ({ value: lang, name: lang }))}
-						label="language"
-						bind:value={form.language}
-						validator={validators.language}
-					></Select>
-				</div>
-				<div class="mb-4">
-					<Select
+						disabled={isSubmitting}
 						choices={related.sources.map((s) => ({ value: s.id, name: s.content }))}
 						label="source"
 						bind:value={form.sourceId}
@@ -106,6 +148,7 @@
 				</div>
 				<div class="mb-4">
 					<MultiSelect
+						disabled={isSubmitting}
 						choices={related.tags.map((s) => ({ value: s.id, name: s.title }))}
 						label="tags"
 						bind:value={form.tagIds}
@@ -113,6 +156,7 @@
 				</div>
 				<div class="mb-4">
 					<MultiSelect
+						disabled={isSubmitting}
 						choices={related.links.map((s) => ({ value: s.id, name: s.title }))}
 						label="links"
 						bind:value={form.linkIds}
@@ -121,6 +165,7 @@
 				<div class="mb-4 flex flex-col gap-1">
 					<div class="flex items-center">
 						<Button
+							disabled={isSubmitting}
 							on:click={() => {
 								form.definitions = [...form.definitions, ''];
 								form = { ...form };
@@ -138,6 +183,7 @@
 								<Input bind:value={form.definitions[i]}></Input>
 							</div>
 							<Button
+								disabled={isSubmitting}
 								on:click={() => {
 									form.definitions = form.definitions.filter((_, index) => index !== i);
 									form = { ...form };
@@ -153,6 +199,7 @@
 				<div class="mb-4 flex flex-col gap-1">
 					<div class="flex items-center">
 						<Button
+							disabled={isSubmitting}
 							on:click={() => {
 								form.examples = [...form.examples, ''];
 								form = { ...form };
@@ -170,6 +217,7 @@
 								<Input bind:value={form.examples[i]}></Input>
 							</div>
 							<Button
+								disabled={isSubmitting}
 								on:click={() => {
 									form.examples = form.examples.filter((_, index) => index !== i);
 									form = { ...form };
@@ -183,9 +231,26 @@
 					{/each}
 				</div>
 			</div>
-			<Button color="primary" outline size="xs" on:click={() => onSubmit()}>
-				<CheckSolid></CheckSolid>
-			</Button>
+			<div class="flex flex-col">
+				<Button
+					disabled={isSubmitting || formError}
+					color="primary"
+					outline
+					size="xs"
+					on:click={() => onSubmit()}
+				>
+					{#if isSubmitting}
+						<Spinner class="me-3" size="4" color="primary" />loading ...
+					{:else}
+						<CheckSolid></CheckSolid>
+					{/if}
+				</Button>
+				{#if formError}
+					<Alert class="bg-neutral-800" color="red">
+						<p>{formError}</p>
+					</Alert>
+				{/if}
+			</div>
 		</form>
 	</div>
 {:catch error}

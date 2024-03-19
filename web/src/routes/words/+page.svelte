@@ -102,6 +102,7 @@
 	</Listgroup>
 	{#if $hasError}
 		<Toast
+			class="z-50"
 			divClass="w-full max-w-xs p-4 text-white bg-primary-900 shadow gap-3"
 			on:close={() => ($hasError = null)}
 			position="bottom-right"

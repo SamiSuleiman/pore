@@ -40,7 +40,6 @@ export class UpdateWordDto {
   @Type(() => isUUID)
   linkIds: string[];
 
-  @IsUUID()
   sourceId?: string;
 
   @IsNotEmpty()
