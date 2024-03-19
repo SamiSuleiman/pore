@@ -53,6 +53,7 @@
 
 	form.content = word?.content || '';
 	form.language = word?.language ?? 'English';
+	form.sourceId = word?.source?.id || '';
 	form.tagIds = word?.tags.map((tag) => tag.id) || [];
 	form.linkIds = word?.links.map((link) => link.id) || [];
 	form.definitions = word?.definitions.map((def) => def.content) || [];
@@ -84,10 +85,15 @@
 			<div class="mb-6">
 				<Input label="content" bind:value={form.content} validator={validators.content}></Input>
 				<Select
-					choices={languages}
+					choices={languages.map((lang) => ({ value: lang, name: lang }))}
 					label="language"
 					bind:value={form.language}
 					validator={validators.language}
+				></Select>
+				<Select
+					choices={related.sources.map((s) => ({ value: s.id, name: s.content }))}
+					label="source"
+					bind:value={form.sourceId}
 				></Select>
 			</div>
 			<Button

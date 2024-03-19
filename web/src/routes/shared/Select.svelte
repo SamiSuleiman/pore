@@ -24,7 +24,7 @@
 		{/if}
 	</Label>
 	<Select
-		items={choices.map((choice) => ({ value: choice, name: choice }))}
+		items={choices}
 		class="bg-neutral-800 text-white"
 		size="sm"
 		color={hasErr ? 'red' : 'base'}
