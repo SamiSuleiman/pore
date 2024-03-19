@@ -24,8 +24,8 @@
 		{/if}
 	</Label>
 	<MultiSelect
+		class="dark bg-neutral-800 [&>*]:bg-neutral-800"
 		items={choices}
-		dropdownClass="bg-neutral-800 text-white [&>*]:bg-neutral-800 [&>*]:text-white [&>*:hover]:hover:bg-primary-900 [&>*:hover]:hover:text-white"
 		size="sm"
 		color={hasErr ? 'red' : 'base'}
 		bind:value
