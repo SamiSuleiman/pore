@@ -16,9 +16,13 @@
 	import MultiSelect from '../../shared/MultiSelect.svelte';
 	import { addWord, updateWord } from '$lib/word';
 	import { isOutdated } from '../../../stores/word.store';
+	import { createEventDispatcher } from 'svelte';
 
 	export let word: WordDto | null = null;
-	const invalidFormErrMsg = 'please fill in all required fields.';
+	const dispatch = createEventDispatcher();
+
+	const invalidFormErrMsg = 'please fill in all required fields';
+	let success = false;
 
 	let form: AddWordDto = {
 		content: '',
@@ -44,6 +48,7 @@
 	};
 
 	$: {
+		success = false;
 		for (const entry of Object.entries(validators)) {
 			const [key, validator] = entry;
 			// @ts-ignore
@@ -52,7 +57,7 @@
 		}
 	}
 
-	$: formError = Object.values(validators).some((v) => v.errMsg !== '' && v.isTouched)
+	$: err = Object.values(validators).some((v) => v.errMsg !== '' && v.isTouched)
 		? invalidFormErrMsg
 		: '';
 
@@ -61,16 +66,17 @@
 	form.content = word?.content ?? '';
 	form.language = word?.language ?? 'English';
 	form.sourceId = word?.source?.id;
-	form.tagIds = word?.tags.map((tag) => tag.id) || [];
-	form.linkIds = word?.links.map((link) => link.id) || [];
-	form.definitions = word?.definitions.map((def) => def.content) || [];
-	form.examples = word?.examples.map((ex) => ex.content) || [];
+	form.tagIds = word?.tags.map((tag) => tag.id) ?? [];
+	form.linkIds = word?.links.map((link) => link.id) ?? [];
+	form.definitions = word?.definitions.map((def) => def.content) ?? [];
+	form.examples = word?.examples.map((ex) => ex.content) ?? [];
 
 	async function onSubmit(): Promise<void> {
+		success = false;
 		isSubmitting = true;
-		formError = '';
+		err = '';
 		if (Object.values(validators).some((v) => v.errMsg !== '')) {
-			formError = invalidFormErrMsg;
+			err = invalidFormErrMsg;
 			isSubmitting = false;
 			return;
 		}
@@ -78,19 +84,20 @@
 		const toSubmit = {
 			...form,
 			definitions: form.definitions.filter((def) => def !== ''),
-			examples: word ? form.examples.filter((ex) => ex !== '') : null,
-			sourceId: word ? (form.sourceId === '' ? null : form.sourceId) : null,
+			examples: form.examples.filter((ex) => ex !== ''),
+			sourceId: form.sourceId === '' ? null : form.sourceId,
 		};
-
-		console.log(toSubmit);
 
 		let res;
 		if (!word) res = await addWord(toSubmit as AddWordDto);
 		else res = await updateWord(word.id, toSubmit as UpdateWordDto);
 		isSubmitting = false;
 
-		if (res) $isOutdated = true;
-		else formError = 'something went wrong';
+		if (res) {
+			$isOutdated = true;
+			dispatch('create');
+			success = true;
+		} else err = 'something went wrong';
 	}
 
 	async function getRelated(): Promise<{
@@ -233,7 +240,7 @@
 			</div>
 			<div class="flex flex-col">
 				<Button
-					disabled={isSubmitting || formError}
+					disabled={isSubmitting || err}
 					color="primary"
 					outline
 					size="xs"
@@ -245,9 +252,14 @@
 						<CheckSolid></CheckSolid>
 					{/if}
 				</Button>
-				{#if formError}
-					<Alert class="bg-neutral-800" color="red">
-						<p>{formError}</p>
+				{#if err}
+					<Alert class="bg-neutral-800" color="none">
+						<p class="underline decoration-red-900 decoration-wavy">{err}</p>
+					</Alert>
+				{/if}
+				{#if success}
+					<Alert class="bg-neutral-800" color="none">
+						<p class="underline decoration-green-900 decoration-wavy">success</p>
 					</Alert>
 				{/if}
 			</div>

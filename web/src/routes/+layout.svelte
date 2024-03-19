@@ -2,8 +2,9 @@
 	import '../app.pcss';
 	import { page } from '$app/stores';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
-	$: activeUrl = $page.url.pathname;
 	import { isLoggedIn } from '../stores/auth.store';
+
+	$: activeUrl = $page.url.pathname;
 </script>
 
 <Navbar color="none">

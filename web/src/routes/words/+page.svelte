@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { words, hasError, isLoading, isOutdated } from '../../stores/word.store';
+	import { words, isOutdated } from '../../stores/word.store';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
@@ -18,16 +18,15 @@
 	let isOpen = false;
 	let selectedWord: WordDto | null = null;
 	let isUpsertMode = false;
+	let hasError: null | string = null;
+	let isLoading = true;
 
 	onMount(async () => {
-		if (!$isLoggedIn) goto('/');
-
-		$hasError = null;
-		$isLoading = true;
+		if (!isLoggedIn) goto('/');
 
 		if ($words.length === 0 || $isOutdated) $words = (await getWords()) ?? [];
 
-		$isLoading = false;
+		isLoading = false;
 	});
 
 	async function onDelete(event: CustomEvent<string>): Promise<void> {
@@ -36,7 +35,7 @@
 
 		const _res = await deleteWord(_id);
 		if (!_res) {
-			$hasError = 'an error occurred';
+			hasError = 'an error occurred';
 			return;
 		}
 
@@ -50,17 +49,17 @@
 		if (!_id) {
 			isUpsertMode = true;
 		} else {
-			$isLoading = true;
-			$hasError = null;
+			isLoading = true;
+			hasError = null;
 
 			const _word = await getWord(_id);
 
 			if (!_word) {
-				$hasError = 'an error occurred';
+				hasError = 'an error occurred';
 				return;
 			}
 
-			$isLoading = false;
+			isLoading = false;
 			selectedWord = _word;
 		}
 	}
@@ -69,6 +68,11 @@
 		isOpen = false;
 		selectedWord = null;
 		isUpsertMode = false;
+	}
+
+	async function onCreate(): Promise<void> {
+		$words = (await getWords()) ?? [];
+		$isOutdated = false;
 	}
 
 	$: {
@@ -92,23 +96,23 @@
 		{#each $words as word (word.id)}
 			<Word on:open={onOpen} on:delete={onDelete} {word}></Word>
 		{/each}
-		{#if $words.length === 0 && !$isLoading}
+		{#if $words.length === 0 && !isLoading}
 			<div class="p-4 text-center">no words found</div>
 		{/if}
 	</Listgroup>
-	{#if $hasError}
+	{#if hasError}
 		<Toast
 			class="z-50"
 			divClass="w-full max-w-xs p-4 text-white bg-primary-900 shadow gap-3"
-			on:close={() => ($hasError = null)}
+			on:close={() => (hasError = null)}
 			position="bottom-right"
 			color="red"
 		>
 			<FireSolid slot="icon" />
-			<span>{$hasError}</span>
+			<span>{hasError}</span>
 		</Toast>
 	{/if}
-	{#if $isLoading}
+	{#if isLoading}
 		<div class="flex h-32 items-center justify-center">
 			<Spinner class="h-8 w-8 text-primary-500" />
 		</div>
@@ -120,7 +124,7 @@
 		bind:open={isOpen}
 		on:close={onClose}
 	>
-		<Open word={selectedWord} {isUpsertMode}>
+		<Open word={selectedWord} {isUpsertMode} on:create={onCreate}>
 			<svelte:fragment slot="upsertMode">
 				<Button size="sm" on:click={() => (isUpsertMode = false)} outline class={upsertBtnStyle}>
 					<UndoSolid size="sm"></UndoSolid>

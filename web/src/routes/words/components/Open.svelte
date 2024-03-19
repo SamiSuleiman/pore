@@ -15,7 +15,7 @@
 		{#if word}
 			<slot class="bg-neutral-800 text-white" name="upsertMode" />
 		{/if}
-		<Upsert {word}></Upsert>
+		<Upsert on:create {word}></Upsert>
 	{:else if word}
 		<slot class="bg-neutral-800 text-white" name="detailMode" />
 		<Details {word}></Details>
