@@ -2,15 +2,7 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import {
-		words,
-		hasError,
-		isLoading,
-		isOpen,
-		selectedWord,
-		isUpsertMode,
-		isOutdated,
-	} from '../../stores/word.store';
+	import { words, hasError, isLoading, isOutdated } from '../../stores/word.store';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
 	import { Listgroup } from 'flowbite-svelte';
@@ -18,10 +10,14 @@
 	import { FireSolid, PenSolid, UndoSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Open from './components/Open.svelte';
+	import type { WordDto } from '$lib/word/model';
 
 	const upsertBtnStyle =
 		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
 	let modalTitle = '';
+	let isOpen = false;
+	let selectedWord: WordDto | null = null;
+	let isUpsertMode = false;
 
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
@@ -48,11 +44,11 @@
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {
-		$isOpen = true;
+		isOpen = true;
 
 		const _id = event?.detail;
 		if (!_id) {
-			$isUpsertMode = true;
+			isUpsertMode = true;
 		} else {
 			$isLoading = true;
 			$hasError = null;
@@ -65,19 +61,19 @@
 			}
 
 			$isLoading = false;
-			$selectedWord = _word;
+			selectedWord = _word;
 		}
 	}
 
 	function onClose(): void {
-		$isOpen = false;
-		$selectedWord = null;
-		$isUpsertMode = false;
+		isOpen = false;
+		selectedWord = null;
+		isUpsertMode = false;
 	}
 
 	$: {
-		if (!$isUpsertMode) modalTitle = 'details';
-		else modalTitle = $selectedWord ? 'edit' : 'add';
+		if (!isUpsertMode) modalTitle = 'details';
+		else modalTitle = selectedWord ? 'edit' : 'add';
 	}
 </script>
 
@@ -121,17 +117,17 @@
 		color="none"
 		defaultClass="max-h-full bg-neutral-800 text-white relative flex flex-col mx-auto"
 		title={modalTitle}
-		bind:open={$isOpen}
+		bind:open={isOpen}
 		on:close={onClose}
 	>
-		<Open word={$selectedWord}>
+		<Open word={selectedWord} {isUpsertMode}>
 			<svelte:fragment slot="upsertMode">
-				<Button size="sm" on:click={() => ($isUpsertMode = false)} outline class={upsertBtnStyle}>
+				<Button size="sm" on:click={() => (isUpsertMode = false)} outline class={upsertBtnStyle}>
 					<UndoSolid size="sm"></UndoSolid>
 				</Button>
 			</svelte:fragment>
 			<svelte:fragment slot="detailMode">
-				<Button size="sm" on:click={() => ($isUpsertMode = true)} outline class={upsertBtnStyle}>
+				<Button size="sm" on:click={() => (isUpsertMode = true)} outline class={upsertBtnStyle}>
 					<PenSolid size="sm"></PenSolid>
 				</Button>
 			</svelte:fragment>
