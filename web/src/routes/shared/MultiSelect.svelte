@@ -24,7 +24,7 @@
 		{/if}
 	</Label>
 	<MultiSelect
-		class="dark bg-neutral-800 [&>*]:bg-neutral-800"
+		class="dark border-gray-600 bg-neutral-800 [&>*]:bg-neutral-800"
 		items={choices}
 		size="sm"
 		color={hasErr ? 'red' : 'base'}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { AddWordDto, WordDto } from '$lib/word/model';
 	import { Button, Spinner } from 'flowbite-svelte';
-	import { CheckSolid } from 'flowbite-svelte-icons';
+	import { CheckSolid, TrashBinSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { required } from '../../shared/validators';
 	import type { InputValidator } from '../../shared/input';
 	import Input from '../../shared/Input.svelte';
@@ -20,7 +20,7 @@
 
 	export let word: WordDto | null = null;
 
-	const form: AddWordDto = {
+	let form: AddWordDto = {
 		content: '',
 		language: 'English',
 		tagIds: [],
@@ -85,35 +85,105 @@
 			<slot class="bg-neutral-800 text-white" name="detailMode" />
 		{/if}
 		<form class="flex flex-col" method="POST" on:submit|preventDefault>
-			<div class="mb-6">
-				<Input label="content" bind:value={form.content} validator={validators.content}></Input>
-				<Select
-					choices={languages.map((lang) => ({ value: lang, name: lang }))}
-					label="language"
-					bind:value={form.language}
-					validator={validators.language}
-				></Select>
-				<Select
-					choices={related.sources.map((s) => ({ value: s.id, name: s.content }))}
-					label="source"
-					bind:value={form.sourceId}
-				></Select>
-				<MultiSelect
-					choices={related.tags.map((s) => ({ value: s.id, name: s.title }))}
-					label="tags"
-					bind:value={form.tagIds}
-				></MultiSelect>
-				<MultiSelect
-					choices={related.links.map((s) => ({ value: s.id, name: s.title }))}
-					label="links"
-					bind:value={form.linkIds}
-				></MultiSelect>
+			<div>
+				<div class="mb-4">
+					<Input label="content" bind:value={form.content} validator={validators.content}></Input>
+				</div>
+				<div class="mb-4">
+					<Select
+						choices={languages.map((lang) => ({ value: lang, name: lang }))}
+						label="language"
+						bind:value={form.language}
+						validator={validators.language}
+					></Select>
+				</div>
+				<div class="mb-4">
+					<Select
+						choices={related.sources.map((s) => ({ value: s.id, name: s.content }))}
+						label="source"
+						bind:value={form.sourceId}
+					></Select>
+				</div>
+				<div class="mb-4">
+					<MultiSelect
+						choices={related.tags.map((s) => ({ value: s.id, name: s.title }))}
+						label="tags"
+						bind:value={form.tagIds}
+					></MultiSelect>
+				</div>
+				<div class="mb-4">
+					<MultiSelect
+						choices={related.links.map((s) => ({ value: s.id, name: s.title }))}
+						label="links"
+						bind:value={form.linkIds}
+					></MultiSelect>
+				</div>
+				<div class="mb-4 flex flex-col gap-1">
+					<div class="flex items-center">
+						<Button
+							on:click={() => {
+								form.definitions = [...form.definitions, ''];
+								form = { ...form };
+							}}
+							color="none"
+							class=" text-primary-900 ring-neutral-800 hover:text-primary-700"
+						>
+							<PlusSolid></PlusSolid>
+						</Button>
+						<h1>definitions</h1>
+					</div>
+					{#each form.definitions as _, i}
+						<div class="flex flex-1 items-center justify-center gap-3">
+							<div class="flex-1">
+								<Input bind:value={form.definitions[i]}></Input>
+							</div>
+							<Button
+								on:click={() => {
+									form.definitions = form.definitions.filter((_, index) => index !== i);
+									form = { ...form };
+								}}
+								color="none"
+								class="text-primary-900 ring-neutral-800 hover:text-primary-700"
+							>
+								<TrashBinSolid></TrashBinSolid>
+							</Button>
+						</div>
+					{/each}
+				</div>
+				<div class="mb-4 flex flex-col gap-1">
+					<div class="flex items-center">
+						<Button
+							on:click={() => {
+								form.examples = [...form.examples, ''];
+								form = { ...form };
+							}}
+							color="none"
+							class="text-primary-800 ring-neutral-800 hover:text-primary-700"
+						>
+							<PlusSolid></PlusSolid>
+						</Button>
+						<h1>examples</h1>
+					</div>
+					{#each form.examples as _, i}
+						<div class="flex flex-1 items-center justify-center gap-3">
+							<div class="flex-1">
+								<Input bind:value={form.examples[i]}></Input>
+							</div>
+							<Button
+								on:click={() => {
+									form.examples = form.examples.filter((_, index) => index !== i);
+									form = { ...form };
+								}}
+								color="none"
+								class="text-primary-900 ring-neutral-800 hover:text-primary-700"
+							>
+								<TrashBinSolid></TrashBinSolid>
+							</Button>
+						</div>
+					{/each}
+				</div>
 			</div>
-			<Button
-				on:click={() => onSubmit()}
-				color="none"
-				class="text-primary-900 ring-neutral-800 hover:text-primary-700"
-			>
+			<Button color="primary" outline size="xs" on:click={() => onSubmit()}>
 				<CheckSolid></CheckSolid>
 			</Button>
 		</form>
