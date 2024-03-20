@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { WordDto } from '$lib/word/model';
 	import { AccordionItem, Accordion } from 'flowbite-svelte';
-	import { ArrowRightSolid, BookSolid } from 'flowbite-svelte-icons';
+	import { ArrowRightSolid, BookSolid, LinkSolid } from 'flowbite-svelte-icons';
 
 	export let word: WordDto;
 
@@ -102,27 +102,37 @@
 		<span slot="header" class={accordionOpts.headerClass}>links</span>
 		<div class="flex flex-col gap-10">
 			{#each word.links as link (link.id)}
-				<div>
-					<p>
-						<i class="text-primary-800">- </i>
-						<span>
-							{link.title}
-							<ArrowRightSolid class="inline text-center"></ArrowRightSolid>
-							{#each getLinkOtherWords(link.id) as word (word.id)}
-								<span>
-									{word.content}
-								</span>
-							{/each}
-							{#if word.links.length === 0}
-								<p class="text-gray-500">
-									no links
-									<i class="text-primary-800">.</i>
-								</p>
-							{/if}
-						</span>
+				{#if link.words.length > 1}
+					<div>
+						<p>
+							<i class="text-primary-800">- </i>
+							<span>
+								{link.title}
+								<ArrowRightSolid class="inline text-center"></ArrowRightSolid>
+								{#each getLinkOtherWords(link.id) as word (word.id)}
+									<span>
+										{word.content}
+									</span>
+									{#if word !== getLinkOtherWords(link.id)[getLinkOtherWords(link.id).length - 1]}
+										<LinkSolid class="inline text-center"></LinkSolid>
+									{/if}
+								{/each}
+							</span>
+						</p>
+					</div>
+				{:else}
+					<p class="text-gray-500">
+						no links
+						<i class="text-primary-800">.</i>
 					</p>
-				</div>
+				{/if}
 			{/each}
+			{#if word.links.length === 0}
+				<p class="text-gray-500">
+					no links
+					<i class="text-primary-800">.</i>
+				</p>
+			{/if}
 		</div>
 	</AccordionItem>
 </Accordion>

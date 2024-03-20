@@ -48,7 +48,7 @@
 				></i
 			>
 			{#if word.links.length > 0}
-				<i><small>related/linked to {word.links.length} word(s) </small></i>
+				<i><small>{word.links.length} relations/links</small></i>
 			{/if}
 		</div>
 	</ListgroupItem>

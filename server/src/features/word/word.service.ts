@@ -29,11 +29,18 @@ export class WordService {
       where: { userId: ownerId },
       relations: {
         tags: true,
-        links: true,
+        links: {
+          words: true,
+        },
         source: true,
       },
     });
-    return _words.map((word) => WordMapper.toPreview(word));
+    return _words.map((word) =>
+      WordMapper.toPreview({
+        ...word,
+        links: word.links.filter((link) => link.words?.length > 1) ?? [],
+      }),
+    );
   }
 
   async findOne(id: string, ownerId: string): Promise<WordDto> {
