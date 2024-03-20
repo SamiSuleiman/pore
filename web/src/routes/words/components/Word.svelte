@@ -42,8 +42,14 @@
 			</div>
 		</div>
 		<div class="flex flex-col max-sm:hidden">
-			<i><small>{word.source?.type}: {word.source?.content}</small></i>
-			<i><small>related/linked to {word.links.length} word(s) </small></i>
+			<i
+				><small
+					>{word.source?.type ? word.source.type + ':' : ''} {word.source?.content ?? ''}</small
+				></i
+			>
+			{#if word.links.length > 0}
+				<i><small>related/linked to {word.links.length} word(s) </small></i>
+			{/if}
 		</div>
 	</ListgroupItem>
 	<Button
