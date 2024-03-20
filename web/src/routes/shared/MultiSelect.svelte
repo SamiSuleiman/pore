@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Label, Helper, Button } from 'flowbite-svelte';
+	import { Label, Helper } from 'flowbite-svelte';
 	import type { InputValidator } from './input';
 
 	export let label = '';

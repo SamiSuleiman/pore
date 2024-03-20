@@ -25,13 +25,13 @@
 	let success = false;
 
 	let form: AddWordDto = {
-		content: '',
-		language: 'English',
-		tagIds: [],
-		linkIds: [],
-		definitions: [],
-		examples: [],
-		sourceId: '',
+		content: word?.content ?? '',
+		language: word?.language ?? 'English',
+		tagIds: word?.tags.map((tag) => tag.id) ?? [],
+		linkIds: word?.links.map((link) => link.id) ?? [],
+		definitions: word?.definitions.map((def) => def.content) ?? [],
+		examples: word?.examples.map((ex) => ex.content) ?? [],
+		sourceId: word?.source?.id,
 	};
 
 	let validators: Record<string, InputValidator> = {
@@ -62,14 +62,6 @@
 		: '';
 
 	let isSubmitting = false;
-
-	form.content = word?.content ?? '';
-	form.language = word?.language ?? 'English';
-	form.sourceId = word?.source?.id;
-	form.tagIds = word?.tags.map((tag) => tag.id) ?? [];
-	form.linkIds = word?.links.map((link) => link.id) ?? [];
-	form.definitions = word?.definitions.map((def) => def.content) ?? [];
-	form.examples = word?.examples.map((ex) => ex.content) ?? [];
 
 	async function onSubmit(): Promise<void> {
 		success = false;

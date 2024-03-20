@@ -18,9 +18,9 @@
 	let success = false;
 
 	let form: UpsertTagDto = {
-		title: '',
-		desc: '',
-		wordIds: [],
+		title: tag?.title ?? '',
+		desc: tag?.desc ?? '',
+		wordIds: tag?.words.map((w) => w.id) ?? [],
 	};
 
 	let validators: Record<string, InputValidator> = {
@@ -62,7 +62,7 @@
 			return;
 		}
 
-		let res = tag ? await updateTag(tag.id, form) : addTag(form);
+		let res = tag ? await updateTag(tag.id, form) : await addTag(form);
 		isSubmitting = false;
 
 		if (res) {
