@@ -22,7 +22,7 @@
 	let isLoading = true;
 
 	onMount(async () => {
-		if (!isLoggedIn) goto('/');
+		if (!$isLoggedIn) goto('/');
 
 		if ($words.length === 0 || $isOutdated) $words = (await getWords()) ?? [];
 

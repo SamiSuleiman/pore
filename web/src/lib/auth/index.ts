@@ -35,6 +35,7 @@ export async function refresh(): Promise<void> {
 	const _tokens = extractTokensFromCookie();
 	if (!_tokens) return;
 	const _refreshed = await get<AuthCookie>(`${AUTH_URL}/refresh`);
+	if (!_refreshed) return;
 	setTokensInCookie(_refreshed);
 }
 
