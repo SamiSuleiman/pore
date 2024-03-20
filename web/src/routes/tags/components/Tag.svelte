@@ -4,6 +4,7 @@
 	import { TrashBinSolid } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 	import type { ItemActionEvent } from '../../models';
+	import { fade } from 'svelte/transition';
 
 	export let tag: TagPreviewDto;
 
@@ -18,7 +19,7 @@
 	}
 </script>
 
-<div class="flex justify-between p-3 align-middle">
+<div transition:fade={{ delay: 100, duration: 100 }} class="flex justify-between p-3 align-middle">
 	<ListgroupItem
 		on:click={onOpen}
 		focusClass="focus:z-40 focus:outline-none focus:ring-2 focus:ring-primary-700 dark:focus:ring-gray-500 dark:focus:text-white"

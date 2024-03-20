@@ -96,7 +96,7 @@
 			<Tag on:open={onOpen} on:delete={onDelete} {tag}></Tag>
 		{/each}
 		{#if $tags.length === 0 && !isLoading}
-			<div class="p-4 text-center">no words found</div>
+			<div class="p-4 text-center">no tags found</div>
 		{/if}
 	</Listgroup>
 	{#if hasError}

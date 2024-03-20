@@ -29,6 +29,11 @@
 			errMsg: '',
 			isTouched: false,
 		},
+		desc: {
+			fn: required,
+			errMsg: '',
+			isTouched: false,
+		},
 	};
 
 	$: {
@@ -91,7 +96,12 @@
 				</div>
 				<div class="mb-4 flex">
 					<div class="flex-1">
-						<Input disabled={isSubmitting} label="desc" bind:value={form.desc}></Input>
+						<Input
+							disabled={isSubmitting}
+							label="desc*"
+							bind:value={form.desc}
+							validator={validators.desc}
+						></Input>
 					</div>
 				</div>
 				<div class="mb-4">
@@ -109,7 +119,7 @@
 					color="primary"
 					outline
 					size="xs"
-					on:click={() => onSubmit()}
+					on:click={onSubmit}
 				>
 					{#if isSubmitting}
 						<Spinner class="me-3" size="4" color="primary" />loading ...

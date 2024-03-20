@@ -242,7 +242,7 @@
 					color="primary"
 					outline
 					size="xs"
-					on:click={() => onSubmit()}
+					on:click={onSubmit}
 				>
 					{#if isSubmitting}
 						<Spinner class="me-3" size="4" color="primary" />loading ...
