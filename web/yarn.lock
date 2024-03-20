@@ -492,6 +492,16 @@
     "@rollup/plugin-node-resolve" "^15.2.3"
     rollup "^4.9.5"
 
+"@sveltejs/adapter-node@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-node/-/adapter-node-5.0.1.tgz#b5ed2d5897d06589e6266095a531b2ba8fbe4a15"
+  integrity sha512-eYdmxdUWMW+dad1JfMsWBPY2vjXz9eE+52A2AQnXPScPJlIxIVk5mmbaEEzrZivLfO2wEcLTZ5vdC03W69x+iA==
+  dependencies:
+    "@rollup/plugin-commonjs" "^25.0.7"
+    "@rollup/plugin-json" "^6.1.0"
+    "@rollup/plugin-node-resolve" "^15.2.3"
+    rollup "^4.9.5"
+
 "@sveltejs/kit@^2.0.0":
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.5.3.tgz#0d06481c234888287fa6d3c51393c9aa0f6c43ae"

@@ -1,7 +1,7 @@
 ARG IMG=node:18-alpine
 
 # prod build stage
-FROM  ${IMG} AS prod-build
+FROM ${IMG} AS prod-build
 WORKDIR /app
 COPY . .
 RUN yarn --frozen-lockfile

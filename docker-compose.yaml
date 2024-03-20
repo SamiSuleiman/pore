@@ -20,6 +20,8 @@ services:
       context: ./web
       dockerfile: Dockerfile
     container_name: web
+    ports:
+      - "127.0.0.1:4200:4200"
     depends_on:
       - nest
     networks:
