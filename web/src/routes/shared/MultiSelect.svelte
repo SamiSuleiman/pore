@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Label, Helper, MultiSelect } from 'flowbite-svelte';
+	import { Label, Helper, Button } from 'flowbite-svelte';
 	import type { InputValidator } from './input';
 
 	export let label = '';
@@ -9,6 +9,13 @@
 	export let disabled = false;
 
 	$: hasErr = !!validator?.errMsg && validator?.isTouched;
+
+	function onChange(ev: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
+		const _selected = ev.currentTarget.selectedOptions;
+		value = Array.from(_selected)
+			.filter((v) => v.value !== '')
+			.map((option) => option.value);
+	}
 </script>
 
 <div class="mb-6 {disabled ? 'pointer-events-none' : ''}">
@@ -24,18 +31,12 @@
 			>
 		{/if}
 	</Label>
-	<MultiSelect
-		class=" dark border-gray-600 bg-neutral-800 [&>*]:bg-neutral-800"
-		items={choices}
-		size="sm"
-		color={hasErr ? 'red' : 'base'}
-		bind:value
-		id={label}
-		name={label}
-		on:blur|once={() => {
-			if (validator) {
-				validator.isTouched = true;
-			}
-		}}
-	/>
+	<select multiple class="w-full rounded-md border-neutral-500 bg-neutral-800" on:change={onChange}>
+		<option value=""> none </option>
+		{#each choices as choice (choice.value)}
+			<option selected={value.includes(choice.value)} class="p-3" value={choice.value}
+				>{choice.name}</option
+			>
+		{/each}
+	</select>
 </div>
