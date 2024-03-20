@@ -63,5 +63,3 @@
 		} else err = 'something went wrong';
 	}
 </script>
-
-upsert boyyyy
