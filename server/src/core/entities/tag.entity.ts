@@ -19,9 +19,6 @@ export class Tag {
   @Column({ type: 'varchar', length: 180 })
   desc: string;
 
-  @Column({ type: 'varchar', length: 15 })
-  color: string;
-
   @Column({ type: 'uuid' })
   userId: string;
 

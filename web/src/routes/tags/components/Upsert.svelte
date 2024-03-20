@@ -5,6 +5,11 @@
 	import { required } from '../../shared/validators';
 	import { addTag, updateTag } from '$lib/tag';
 	import { isOutdated } from '../../../stores/tag.store';
+	import { Alert, Button, Spinner } from 'flowbite-svelte';
+	import { CheckSolid } from 'flowbite-svelte-icons';
+	import MultiSelect from '../../shared/MultiSelect.svelte';
+	import Input from '../../shared/Input.svelte';
+	import { getWords } from '$lib/word';
 
 	export let tag: TagDto | null = null;
 	const dispatch = createEventDispatcher();
@@ -15,7 +20,6 @@
 	let form: UpsertTagDto = {
 		title: '',
 		desc: '',
-		color: '',
 		wordIds: [],
 	};
 
@@ -63,3 +67,69 @@
 		} else err = 'something went wrong';
 	}
 </script>
+
+{#await getWords()}
+	<div class="flex h-32 items-center justify-center">
+		<Spinner class="h-8 w-8 text-primary-500" />
+	</div>
+{:then words}
+	<div class="flex flex-col gap-2">
+		{#if tag}
+			<slot class="bg-neutral-800 text-white" name="detailMode" />
+		{/if}
+		<form class="flex flex-col" method="POST" on:submit|preventDefault>
+			<div>
+				<div class="mb-4 flex">
+					<div class="flex-1">
+						<Input
+							disabled={isSubmitting}
+							label="content*"
+							bind:value={form.title}
+							validator={validators.title}
+						></Input>
+					</div>
+				</div>
+				<div class="mb-4 flex">
+					<div class="flex-1">
+						<Input disabled={isSubmitting} label="desc" bind:value={form.desc}></Input>
+					</div>
+				</div>
+				<div class="mb-4">
+					<MultiSelect
+						disabled={isSubmitting}
+						choices={(words ? words : []).map((w) => ({ value: w.id, name: w.content }))}
+						label="words"
+						bind:value={form.wordIds}
+					></MultiSelect>
+				</div>
+			</div>
+			<div class="flex flex-col">
+				<Button
+					disabled={isSubmitting || err}
+					color="primary"
+					outline
+					size="xs"
+					on:click={() => onSubmit()}
+				>
+					{#if isSubmitting}
+						<Spinner class="me-3" size="4" color="primary" />loading ...
+					{:else}
+						<CheckSolid></CheckSolid>
+					{/if}
+				</Button>
+				{#if err}
+					<Alert class="bg-neutral-800" color="none">
+						<p class="underline decoration-red-900 decoration-wavy">{err}</p>
+					</Alert>
+				{/if}
+				{#if success}
+					<Alert class="bg-neutral-800" color="none">
+						<p class="underline decoration-green-900 decoration-wavy">success</p>
+					</Alert>
+				{/if}
+			</div>
+		</form>
+	</div>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}

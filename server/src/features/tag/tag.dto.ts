@@ -5,7 +5,6 @@ import { WordPreviewDto } from '../word/word.dto';
 export class TagPreviewDto {
   id: string;
   title: string;
-  color: string;
 }
 
 export class TagDto extends TagPreviewDto {
@@ -21,10 +20,6 @@ export class UpsertTagDto {
   @IsNotEmpty()
   @MaxLength(180)
   desc: string;
-
-  @IsNotEmpty()
-  @MaxLength(20)
-  color: string;
 
   @IsArray()
   @Type(() => isUUID)

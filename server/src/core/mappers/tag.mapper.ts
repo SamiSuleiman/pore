@@ -9,7 +9,6 @@ export class TagMapper {
     return {
       id: tag.id,
       title: tag.title,
-      color: tag.color,
     };
   }
 
@@ -17,7 +16,6 @@ export class TagMapper {
     return {
       id: tag.id,
       title: tag.title,
-      color: tag.color,
       desc: tag.desc,
       words: tag.words.map((word) => WordMapper.toPreview(word)),
     };

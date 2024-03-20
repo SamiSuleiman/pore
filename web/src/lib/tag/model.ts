@@ -14,6 +14,5 @@ export interface TagDto extends TagPreviewDto {
 export interface UpsertTagDto {
 	title: string;
 	desc: string;
-	color: string;
 	wordIds: string[];
 }
