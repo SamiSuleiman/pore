@@ -99,7 +99,7 @@
 	}> {
 		const _res = await Promise.all([getTags(), getLinks(), getSources()]);
 
-		return { tags: _res[0] ?? [], links: _res[1], sources: _res[2] };
+		return { tags: _res[0] ?? [], links: _res[1], sources: _res[2] ?? [] };
 	}
 </script>
 
