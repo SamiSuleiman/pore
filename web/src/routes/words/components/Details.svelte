@@ -40,16 +40,18 @@
 				{word.language}
 			</span>
 		</p>
-		<p>
-			source <span class="text-primary-800">: </span>
-			<span class="text-white">
-				{word.source?.type}
-			</span>
-			<i class="text-primary-800"> - </i>
-			<span class="text-white">
-				{word.source?.content}
-			</span>
-		</p>
+		{#if word.source}
+			<p>
+				source <span class="text-primary-800">: </span>
+				<span class="text-white">
+					{word.source?.type}
+				</span>
+				<i class="text-primary-800"> - </i>
+				<span class="text-white">
+					{word.source?.content}
+				</span>
+			</p>
+		{/if}
 	</AccordionItem>
 	<AccordionItem
 		borderOpenClass={accordionOpts.borderOpenClass}
