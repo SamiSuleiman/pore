@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  nest:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: nest
+    ports:
+      - "127.0.0.1:3000:3000"
+    expose:
+      - 3000
+    depends_on:
+      - db
+    networks:
+      - pore_network
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: web
+    depends_on:
+      - nest
+    networks:
+      - pore_network
+
+  db:
+    image: mariadb
+    container_name: db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASS}
+    volumes:
+      - "~/.local.docker/volumes/mariadb.backup:/var/lib/mysql:delegated"
+    networks:
+      - pore_network
+
+networks:
+  pore_network:
+    driver: bridge
