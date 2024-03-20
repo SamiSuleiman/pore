@@ -138,7 +138,10 @@
 				<div class="mb-4">
 					<Select
 						disabled={isSubmitting}
-						choices={related.sources.map((s) => ({ value: s.id, name: s.content }))}
+						choices={[
+							{ value: '', name: '-' },
+							...related.sources.map((s) => ({ value: s.id, name: s.content })),
+						]}
 						label="source"
 						bind:value={form.sourceId}
 					></Select>

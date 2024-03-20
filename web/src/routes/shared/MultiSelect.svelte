@@ -32,7 +32,7 @@
 		{/if}
 	</Label>
 	<select multiple class="w-full rounded-md border-neutral-500 bg-neutral-800" on:change={onChange}>
-		<option value=""> none </option>
+		<option value=""> - </option>
 		{#each choices as choice (choice.value)}
 			<option selected={value.includes(choice.value)} class="p-3" value={choice.value}
 				>{choice.name}</option
