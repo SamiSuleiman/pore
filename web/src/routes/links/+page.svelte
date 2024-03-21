@@ -71,7 +71,6 @@
 
 	async function onCreate(): Promise<void> {
 		$links = (await getLinks()) ?? [];
-		$isOutdated = false;
 	}
 
 	$: {

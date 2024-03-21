@@ -72,7 +72,6 @@
 
 	async function onCreate(): Promise<void> {
 		$words = (await getWords()) ?? [];
-		$isOutdated = false;
 	}
 
 	$: {

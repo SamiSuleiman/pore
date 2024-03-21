@@ -1,11 +1,15 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
+import { invalidateCache } from '$lib/invalidate';
+import { isOutdated } from '../../stores/word.store';
 import { type AddWordDto, type UpdateWordDto, type WordDto, type WordPreviewDto } from './model';
 
 const WORDS_URL = `${env.baseUrl}/words`;
 
 export async function getWords(): Promise<WordPreviewDto[] | undefined> {
-	return await get<WordPreviewDto[]>(`${WORDS_URL}`);
+	const _res = await get<WordPreviewDto[]>(`${WORDS_URL}`);
+	if (_res) isOutdated.set(false);
+	return _res;
 }
 
 export async function getWord(id: string): Promise<WordDto | undefined> {
@@ -13,13 +17,19 @@ export async function getWord(id: string): Promise<WordDto | undefined> {
 }
 
 export async function addWord(word: AddWordDto): Promise<boolean> {
-	return await post<AddWordDto>(`${WORDS_URL}`, word);
+	const _res = await post<AddWordDto>(`${WORDS_URL}`, word);
+	if (_res) invalidateCache('word', 'profile', 'link');
+	return _res;
 }
 
 export async function updateWord(id: string, word: UpdateWordDto): Promise<boolean> {
-	return await put<UpdateWordDto>(`${WORDS_URL}/${id}`, word);
+	const _res = await put<UpdateWordDto>(`${WORDS_URL}/${id}`, word);
+	if (_res) invalidateCache('word', 'profile', 'link');
+	return _res;
 }
 
 export async function deleteWord(id: string): Promise<boolean> {
-	return await del(`${WORDS_URL}/${id}`);
+	const _res = await del(`${WORDS_URL}/${id}`);
+	if (_res) invalidateCache('word', 'profile', 'link');
+	return _res;
 }

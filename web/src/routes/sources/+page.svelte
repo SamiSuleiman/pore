@@ -71,7 +71,6 @@
 
 	async function onCreate(): Promise<void> {
 		$sources = (await getSources()) ?? [];
-		$isOutdated = false;
 	}
 
 	$: {

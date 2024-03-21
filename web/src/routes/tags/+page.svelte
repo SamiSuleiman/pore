@@ -2,12 +2,11 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { tags } from '../../stores/tag.store';
+	import { isOutdated, tags } from '../../stores/tag.store';
 	import Tag from './components/Tag.svelte';
 	import { Button, Listgroup, Modal, Spinner, Toast } from 'flowbite-svelte';
 	import { deleteTag, getTag, getTags } from '$lib/tag';
 	import type { TagDto } from '$lib/tag/model';
-	import { isOutdated } from '../../stores/tag.store';
 	import { FireSolid, PenSolid, PlusSolid, UndoSolid } from 'flowbite-svelte-icons';
 	import Open from './components/Open.svelte';
 
@@ -71,7 +70,6 @@
 
 	async function onCreate(): Promise<void> {
 		$tags = (await getTags()) ?? [];
-		$isOutdated = false;
 	}
 
 	$: {

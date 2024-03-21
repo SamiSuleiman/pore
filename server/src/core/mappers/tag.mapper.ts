@@ -3,8 +3,6 @@ import { Tag } from '../entities/tag.entity';
 import { WordMapper } from './word.mapper';
 
 export class TagMapper {
-  private constructor() {}
-
   static toPreview(tag: Tag): TagPreviewDto {
     return {
       id: tag.id,
@@ -17,7 +15,7 @@ export class TagMapper {
       id: tag.id,
       title: tag.title,
       desc: tag.desc,
-      words: tag.words.map((word) => WordMapper.toPreview(word)),
+      words: tag.words?.map((word) => WordMapper.toPreview(word)),
     };
   }
 }

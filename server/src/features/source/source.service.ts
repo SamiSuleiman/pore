@@ -25,7 +25,9 @@ export class SourceService {
         relations: {
           words: {
             tags: true,
-            links: true,
+            links: {
+              words: true,
+            },
           },
         },
       }),

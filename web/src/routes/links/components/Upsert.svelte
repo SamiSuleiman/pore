@@ -4,8 +4,6 @@
 	import type { InputValidator } from '../../shared/input';
 	import { required } from '../../shared/validators';
 	import { addLink, updateLink } from '$lib/link';
-	import { isOutdated } from '../../../stores/link.store';
-	import { isOutdated as isWordsOutdated } from '../../../stores/word.store';
 	import { Alert, Button, Spinner } from 'flowbite-svelte';
 	import { CheckSolid } from 'flowbite-svelte-icons';
 	import MultiSelect from '../../shared/MultiSelect.svelte';
@@ -72,8 +70,6 @@
 		isSubmitting = false;
 
 		if (res) {
-			$isOutdated = true;
-			$isWordsOutdated = true;
 			dispatch('create');
 			success = true;
 		} else err = 'something went wrong';

@@ -15,8 +15,6 @@
 	import type { SourcePreviewDto } from '$lib/source/model';
 	import MultiSelect from '../../shared/MultiSelect.svelte';
 	import { addWord, updateWord } from '$lib/word';
-	import { isOutdated } from '../../../stores/word.store';
-	import { isOutdated as isLinksOutdated } from '../../../stores/link.store';
 	import { createEventDispatcher } from 'svelte';
 
 	export let word: WordDto | null = null;
@@ -87,8 +85,6 @@
 		isSubmitting = false;
 
 		if (res) {
-			$isOutdated = true;
-			$isLinksOutdated = true;
 			dispatch('create');
 			success = true;
 		} else err = 'something went wrong';

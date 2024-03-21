@@ -7,8 +7,6 @@ import { SourceMapper } from './source.mapper';
 import { TagMapper } from './tag.mapper';
 
 export class WordMapper {
-  private constructor() {}
-
   static toPreview(word: Word): WordPreviewDto {
     return {
       id: word.id,

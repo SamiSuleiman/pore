@@ -3,8 +3,6 @@ import { Link } from '../entities/link.entity';
 import { WordMapper } from './word.mapper';
 
 export class LinkMapper {
-  private constructor() {}
-
   static toPreview(link: Link): LinkPreviewDto {
     return {
       id: link.id,

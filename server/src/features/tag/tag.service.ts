@@ -25,7 +25,9 @@ export class TagService {
         relations: {
           words: {
             tags: true,
-            links: true,
+            links: {
+              words: true,
+            },
           },
         },
       }),
