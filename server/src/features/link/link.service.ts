@@ -33,7 +33,9 @@ export class LinkService {
         relations: {
           words: {
             tags: true,
-            links: true,
+            links: {
+              words: true,
+            },
           },
         },
       }),
@@ -41,9 +43,6 @@ export class LinkService {
   }
 
   async create(dto: UpsertLinkDto, ownerId: string): Promise<Link> {
-    if (dto.wordIds.length < 2)
-      throw new Error('Link must have at least 2 words');
-
     const _words = await this.wordRepo.find({
       where: { id: In(dto.wordIds), userId: ownerId },
     });
@@ -58,9 +57,6 @@ export class LinkService {
   }
 
   async update(id: string, dto: UpsertLinkDto, ownerId: string): Promise<Link> {
-    if (dto.wordIds.length < 2)
-      throw new Error('Link must have at least 2 words');
-
     const _link = await this.linkRepo.findOneOrFail({
       where: { id, userId: ownerId },
     });

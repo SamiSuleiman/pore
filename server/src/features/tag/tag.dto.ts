@@ -2,12 +2,12 @@ import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, MaxLength, isUUID } from 'class-validator';
 import { WordPreviewDto } from '../word/word.dto';
 
-export class TagPreviewDto {
+export interface TagPreviewDto {
   id: string;
   title: string;
 }
 
-export class TagDto extends TagPreviewDto {
+export interface TagDto extends TagPreviewDto {
   desc: string;
   words: WordPreviewDto[];
 }

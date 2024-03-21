@@ -16,6 +16,7 @@
 	import MultiSelect from '../../shared/MultiSelect.svelte';
 	import { addWord, updateWord } from '$lib/word';
 	import { isOutdated } from '../../../stores/word.store';
+	import { isOutdated as isLinksOutdated } from '../../../stores/link.store';
 	import { createEventDispatcher } from 'svelte';
 
 	export let word: WordDto | null = null;
@@ -87,6 +88,7 @@
 
 		if (res) {
 			$isOutdated = true;
+			$isLinksOutdated = true;
 			dispatch('create');
 			success = true;
 		} else err = 'something went wrong';
@@ -99,7 +101,7 @@
 	}> {
 		const _res = await Promise.all([getTags(), getLinks(), getSources()]);
 
-		return { tags: _res[0] ?? [], links: _res[1], sources: _res[2] ?? [] };
+		return { tags: _res[0] ?? [], links: _res[1] ?? [], sources: _res[2] ?? [] };
 	}
 </script>
 

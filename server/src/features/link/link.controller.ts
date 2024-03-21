@@ -13,7 +13,7 @@ import { LinkService } from './link.service';
 import { JwtPayload } from 'src/core/auth.model';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { Roles } from 'src/core/guards/roles.decorator';
-import { LinkPreviewDto, UpsertLinkDto } from './link.dto';
+import { LinkDto, LinkPreviewDto, UpsertLinkDto } from './link.dto';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -23,7 +23,7 @@ export class LinkController {
 
   @Get()
   async findAll(
-    @Req() req: Express.Request & { user: JwtPayload }
+    @Req() req: Express.Request & { user: JwtPayload },
   ): Promise<LinkPreviewDto[]> {
     return await this.linkService.findAll(req.user.sub);
   }
@@ -31,15 +31,15 @@ export class LinkController {
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Req() req: Express.Request & { user: JwtPayload }
-  ): Promise<LinkPreviewDto> {
+    @Req() req: Express.Request & { user: JwtPayload },
+  ): Promise<LinkDto> {
     return await this.linkService.findOne(id, req.user.sub);
   }
 
   @Post()
   async create(
     @Req() req: Express.Request & { user: JwtPayload },
-    @Body() body: UpsertLinkDto
+    @Body() body: UpsertLinkDto,
   ): Promise<void> {
     await this.linkService.create(body, req.user.sub);
   }
@@ -48,7 +48,7 @@ export class LinkController {
   async update(
     @Param('id') id: string,
     @Req() req: Express.Request & { user: JwtPayload },
-    @Body() body: UpsertLinkDto
+    @Body() body: UpsertLinkDto,
   ): Promise<void> {
     await this.linkService.update(id, body, req.user.sub);
   }
@@ -56,9 +56,8 @@ export class LinkController {
   @Delete(':id')
   async remove(
     @Param('id') id: string,
-    @Req() req: Express.Request & { user: JwtPayload }
+    @Req() req: Express.Request & { user: JwtPayload },
   ): Promise<void> {
     await this.linkService.remove(id, req.user.sub);
   }
 }
-

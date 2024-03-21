@@ -9,6 +9,7 @@ export class LinkMapper {
     return {
       id: link.id,
       title: link.title,
+      wordContents: link.words.map((word) => word.content),
     };
   }
 

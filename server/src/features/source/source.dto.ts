@@ -2,13 +2,13 @@ import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, MaxLength, isUUID } from 'class-validator';
 import { WordPreviewDto } from '../word/word.dto';
 
-export class SourcePreviewDto {
+export interface SourcePreviewDto {
   id: string;
   type: string;
   content: string;
 }
 
-export class SourceDto extends SourcePreviewDto {
+export interface SourceDto extends SourcePreviewDto {
   words: WordPreviewDto[];
 }
 

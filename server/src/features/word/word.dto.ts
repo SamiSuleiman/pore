@@ -1,18 +1,12 @@
 import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsUUID,
-  MaxLength,
-  isUUID,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, MaxLength, isUUID } from 'class-validator';
 import { LinkDto, LinkPreviewDto } from '../link/link.dto';
 import { SourcePreviewDto } from '../source/source.dto';
 import { TagPreviewDto } from '../tag/tag.dto';
 import { DefinitionDto } from './definition.dto';
 import { ExampleDto } from './example.dto';
 
-export class WordPreviewDto {
+export interface WordPreviewDto {
   id: string;
   content: string;
   tags: TagPreviewDto[];
@@ -21,7 +15,7 @@ export class WordPreviewDto {
   language: string;
 }
 
-export class WordDto extends WordPreviewDto {
+export interface WordDto extends Omit<WordPreviewDto, 'links'> {
   definitions: DefinitionDto[];
   examples: ExampleDto[];
   links: LinkDto[];

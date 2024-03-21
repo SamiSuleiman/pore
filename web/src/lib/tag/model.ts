@@ -3,7 +3,6 @@ import type { WordPreviewDto } from '$lib/word/model';
 export interface TagPreviewDto {
 	id: string;
 	title: string;
-	color: string;
 }
 
 export interface TagDto extends TagPreviewDto {
