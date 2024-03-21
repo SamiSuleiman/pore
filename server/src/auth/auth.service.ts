@@ -73,4 +73,21 @@ export class AuthService {
       ),
     };
   }
+
+  async getLoginData(profile: any) {
+    const _email = profile.emails?.[0].value;
+    const _name = profile.displayName ?? profile.username;
+    const _avatar = profile.photos?.[0].value ?? '';
+
+    if (!_email) throw new Error('No email found');
+
+    const _loginRes = await this.login({
+      email: _email,
+      name: _name,
+      avatar: _avatar,
+      createdAt: new Date(),
+    });
+
+    return JSON.stringify(_loginRes);
+  }
 }

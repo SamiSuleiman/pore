@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
-import { Profile } from 'passport-github2';
 import { AuthService } from './auth.service';
 import { LoginResDto } from '../core/auth.model';
 
@@ -18,7 +17,6 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
   ) {
-    // ? better way to validate this?
     this.configService.getOrThrow('CLIENT_BASE_URL');
   }
 
@@ -30,21 +28,7 @@ export class AuthController {
   @Get('google/callback')
   @Redirect(`${process.env['CLIENT_BASE_URL']}`)
   async googleCallBack(@Req() req: Express.Request): Promise<{ url: string }> {
-    const _profile = req.user as Profile;
-    const _email = _profile.emails?.[0].value;
-    const _name = _profile.displayName ?? _profile.username;
-    const _avatar = _profile.photos?.[0].value ?? '';
-
-    if (!_email) throw new Error('No email found');
-
-    const _loginRes = await this.authService.login({
-      email: _email,
-      name: _name,
-      avatar: _avatar,
-      createdAt: new Date(),
-    });
-
-    const _data = JSON.stringify(_loginRes);
+    const _data = await this.authService.getLoginData(req.user);
     return { url: `${process.env['CLIENT_BASE_URL']}/?data=${_data}` };
   }
 
@@ -56,21 +40,7 @@ export class AuthController {
   @Get('github/callback')
   @Redirect(`${process.env['CLIENT_BASE_URL']}`)
   async githubCallBack(@Req() req: Express.Request): Promise<{ url: string }> {
-    const _profile = req.user as Profile;
-    const _email = _profile.emails?.[0].value;
-    const _name = _profile.displayName ?? _profile.username;
-    const _avatar = _profile.photos?.[0].value ?? '';
-
-    if (!_email) throw new Error('No email found');
-
-    const _loginRes = await this.authService.login({
-      email: _email,
-      name: _name,
-      avatar: _avatar,
-      createdAt: new Date(),
-    });
-
-    const _data = JSON.stringify(_loginRes);
+    const _data = await this.authService.getLoginData(req.user);
     return { url: `${process.env['CLIENT_BASE_URL']}/?data=${_data}` };
   }
 
