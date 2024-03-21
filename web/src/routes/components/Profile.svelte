@@ -1,13 +1,13 @@
 <script>
 	import { logout } from '$lib/auth';
 	import { Button } from 'flowbite-svelte';
-	import { userOverview } from '../../stores/user.store';
+	import { isOutdated, userOverview } from '../../stores/user.store';
 	import { getUserOverview } from '$lib/user';
 	import { onMount } from 'svelte';
 	import { Card, Avatar } from 'flowbite-svelte';
 
 	onMount(async () => {
-		if ($userOverview === undefined) userOverview.set(await getUserOverview());
+		if ($userOverview === undefined || $isOutdated) userOverview.set(await getUserOverview());
 	});
 </script>
 
