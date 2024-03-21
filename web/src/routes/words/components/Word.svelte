@@ -31,11 +31,11 @@
 				<h1>{word.content}</h1>
 				<p>{word.language}</p>
 			</div>
-			<div class="flex flex-wrap gap-3">
+			<div class="flex w-2/3 flex-wrap gap-3">
 				{#each word.tags as tag (tag.id)}
 					<Badge
 						color="none"
-						class="rounded-none bg-neutral-800 p-1 text-gray-300 ring-1 ring-primary-900"
+						class="bg-neutral-800 p-1 text-gray-300 underline decoration-primary-900 decoration-wavy ring-0"
 						>{tag.title}</Badge
 					>
 				{/each}
