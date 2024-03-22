@@ -23,7 +23,8 @@
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($sources.length === 0 || $isOutdated) $sources = (await getSources()) ?? [];
+		if ($sources.items.length === 0 || $isOutdated)
+			$sources = (await getSources()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
@@ -38,7 +39,10 @@
 			return;
 		}
 
-		$sources = $sources.filter((source) => source.id !== _id);
+		$sources = {
+			items: $sources.items.filter((s) => s.id !== _id),
+			count: $sources.count - 1,
+		};
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {
@@ -70,7 +74,7 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$sources = (await getSources()) ?? [];
+		$sources = (await getSources()) ?? { items: [], count: 0 };
 	}
 
 	$: {
@@ -91,10 +95,10 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $sources as source (source.id)}
+		{#each $sources.items as source (source.id)}
 			<Source on:open={onOpen} on:delete={onDelete} {source}></Source>
 		{/each}
-		{#if $sources.length === 0 && !isLoading}
+		{#if $sources.count === 0 && !isLoading}
 			<div class="p-4 text-center">no sources found</div>
 		{/if}
 	</Listgroup>

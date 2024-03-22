@@ -5,6 +5,8 @@ import { Word } from 'src/core/entities/word.entity';
 import { TagMapper } from 'src/core/mappers/tag.mapper';
 import { In, Repository } from 'typeorm';
 import { TagPreviewDto, TagDto, UpsertTagDto } from './tag.dto';
+import { List } from '../model';
+import { PAGE_SIZE } from 'src/consts';
 
 @Injectable()
 export class TagService {
@@ -13,9 +15,19 @@ export class TagService {
     @InjectRepository(Word) private readonly wordRepo: Repository<Word>,
   ) {}
 
-  async findAll(ownerId: string): Promise<TagPreviewDto[]> {
-    const _tags = await this.tagRepo.find({ where: { userId: ownerId } });
-    return _tags.map((tag) => TagMapper.toPreview(tag));
+  async findAll(ownerId: string, page: number): Promise<List<TagPreviewDto>> {
+    const _tagsCount = await this.tagRepo.count({ where: { userId: ownerId } });
+    const _pagedTags = await this.tagRepo
+      .createQueryBuilder()
+      .where('userId = :userId', { userId: ownerId })
+      .skip(page * PAGE_SIZE)
+      .take(PAGE_SIZE)
+      .getMany();
+
+    return {
+      items: _pagedTags.map((tag) => TagMapper.toPreview(tag)),
+      count: _tagsCount,
+    };
   }
 
   async findOne(id: string, ownerId: string): Promise<TagDto> {

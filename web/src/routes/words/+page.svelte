@@ -24,7 +24,8 @@
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($words.length === 0 || $isOutdated) $words = (await getWords()) ?? [];
+		if ($words.items.length === 0 || $isOutdated)
+			$words = (await getWords()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
@@ -39,7 +40,10 @@
 			return;
 		}
 
-		$words = $words.filter((word) => word.id !== _id);
+		$words = {
+			items: $words.items.filter((w) => w.id !== _id),
+			count: $words.count - 1,
+		};
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {
@@ -71,7 +75,7 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$words = (await getWords()) ?? [];
+		$words = (await getWords()) ?? { items: [], count: 0 };
 	}
 
 	$: {
@@ -92,10 +96,10 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $words as word (word.id)}
+		{#each $words.items as word (word.id)}
 			<Word on:open={onOpen} on:delete={onDelete} {word}></Word>
 		{/each}
-		{#if $words.length === 0 && !isLoading}
+		{#if $words.count === 0 && !isLoading}
 			<div class="p-4 text-center">no words found</div>
 		{/if}
 	</Listgroup>

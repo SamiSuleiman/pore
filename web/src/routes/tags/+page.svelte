@@ -22,7 +22,8 @@
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($tags.length === 0 || $isOutdated) $tags = (await getTags()) ?? [];
+		if ($tags.items.length === 0 || $isOutdated)
+			$tags = (await getTags()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
@@ -37,7 +38,10 @@
 			return;
 		}
 
-		$tags = $tags.filter((tag) => tag.id !== _id);
+		$tags = {
+			items: $tags.items.filter((t) => t.id !== _id),
+			count: $tags.count - 1,
+		};
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {
@@ -69,7 +73,7 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$tags = (await getTags()) ?? [];
+		$tags = (await getTags()) ?? { items: [], count: 0 };
 	}
 
 	$: {
@@ -90,10 +94,10 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $tags as tag (tag.id)}
+		{#each $tags.items as tag (tag.id)}
 			<Tag on:open={onOpen} on:delete={onDelete} {tag}></Tag>
 		{/each}
-		{#if $tags.length === 0 && !isLoading}
+		{#if $tags.count === 0 && !isLoading}
 			<div class="p-4 text-center">no tags found</div>
 		{/if}
 	</Listgroup>

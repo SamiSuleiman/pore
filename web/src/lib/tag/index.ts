@@ -1,13 +1,14 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
 import { invalidateCache } from '$lib/invalidate';
+import type { List } from '$lib/models';
 import { isOutdated } from '../../stores/tag.store';
 import { type UpsertTagDto, type TagDto, type TagPreviewDto } from './model';
 
 const TAGS_URL = `${env.baseUrl}/tags`;
 
-export async function getTags(): Promise<TagPreviewDto[] | undefined> {
-	const _res = await get<TagPreviewDto[]>(`${TAGS_URL}`);
+export async function getTags(): Promise<List<TagPreviewDto> | undefined> {
+	const _res = await get<List<TagPreviewDto>>(`${TAGS_URL}`);
 	if (_res) isOutdated.set(false);
 	return _res;
 }

@@ -14,6 +14,7 @@ import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { Roles } from 'src/core/guards/roles.decorator';
 import { SourcePreviewDto, UpsertSourceDto } from './source.dto';
 import { SourceService } from './source.service';
+import { List } from '../model';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -24,8 +25,8 @@ export class SourceController {
   @Get()
   async findAll(
     @Req() req: Express.Request & { user: JwtPayload },
-  ): Promise<SourcePreviewDto[]> {
-    return await this.sourceService.findAll(req.user.sub);
+  ): Promise<List<SourcePreviewDto>> {
+    return await this.sourceService.findAll(req.user.sub, 0);
   }
 
   @Get(':id')

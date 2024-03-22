@@ -14,6 +14,7 @@ import { Roles } from 'src/core/guards/roles.decorator';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { UpsertWordDto, WordDto, WordPreviewDto } from './word.dto';
 import { JwtPayload } from 'src/core/auth.model';
+import { List } from '../model';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -24,8 +25,8 @@ export class WordController {
   @Get()
   async findAll(
     @Req() req: Request & { user: JwtPayload },
-  ): Promise<WordPreviewDto[]> {
-    return await this.wordService.findAll(req.user.sub);
+  ): Promise<List<WordPreviewDto>> {
+    return await this.wordService.findAll(req.user.sub, 0);
   }
 
   @Get(':id')

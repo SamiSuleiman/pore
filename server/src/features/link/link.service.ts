@@ -5,6 +5,8 @@ import { Word } from 'src/core/entities/word.entity';
 import { LinkMapper } from 'src/core/mappers/link.mapper';
 import { In, Repository } from 'typeorm';
 import { LinkPreviewDto, LinkDto, UpsertLinkDto } from './link.dto';
+import { List } from '../model';
+import { PAGE_SIZE } from 'src/consts';
 
 @Injectable()
 export class LinkService {
@@ -13,17 +15,24 @@ export class LinkService {
     @InjectRepository(Word) private readonly wordRepo: Repository<Word>,
   ) {}
 
-  async findAll(ownerId: string): Promise<LinkPreviewDto[]> {
-    const _links = await this.linkRepo.find({
+  async findAll(ownerId: string, page: number): Promise<List<LinkPreviewDto>> {
+    const _linksCount = await this.linkRepo.count({
       where: { userId: ownerId },
-      relations: {
-        words: {
-          tags: true,
-          links: true,
-        },
-      },
     });
-    return _links.map((link) => LinkMapper.toPreview(link));
+    const _pagedLinks = await this.linkRepo
+      .createQueryBuilder('link')
+      .where('link.userId = :userId', { userId: ownerId })
+      .skip(page * PAGE_SIZE)
+      .take(PAGE_SIZE)
+      .leftJoinAndMapMany('link.words', 'link.words', 'word')
+      .leftJoinAndMapMany('word.tags', 'word.tags', 'tag')
+      .leftJoinAndMapMany('word.links', 'word.links', 'links')
+      .getMany();
+
+    return {
+      items: _pagedLinks.map((link) => LinkMapper.toPreview(link)),
+      count: _linksCount,
+    };
   }
 
   async findOne(id: string, ownerId: string): Promise<LinkDto> {

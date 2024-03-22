@@ -1,13 +1,14 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
 import { invalidateCache } from '$lib/invalidate';
+import type { List } from '$lib/models';
 import { isOutdated } from '../../stores/link.store';
 import type { LinkDto, LinkPreviewDto, UpsertLinkDto } from './model';
 
 const LINK_URL = `${env.baseUrl}/links`;
 
-export async function getLinks(): Promise<LinkPreviewDto[] | undefined> {
-	const _res = await get<LinkPreviewDto[]>(`${LINK_URL}`);
+export async function getLinks(): Promise<List<LinkPreviewDto> | undefined> {
+	const _res = await get<List<LinkPreviewDto>>(`${LINK_URL}`);
 	if (_res) isOutdated.set(false);
 	return _res;
 }

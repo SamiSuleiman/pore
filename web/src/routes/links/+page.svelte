@@ -23,7 +23,8 @@
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($links.length === 0 || $isOutdated) $links = (await getLinks()) ?? [];
+		if ($links.items.length === 0 || $isOutdated)
+			$links = (await getLinks()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
@@ -38,7 +39,10 @@
 			return;
 		}
 
-		$links = $links.filter((link) => link.id !== _id);
+		$links = {
+			items: $links.items.filter((l) => l.id !== _id),
+			count: $links.count - 1,
+		};
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {
@@ -70,7 +74,10 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$links = (await getLinks()) ?? [];
+		$links = (await getLinks()) ?? {
+			items: [],
+			count: 0,
+		};
 	}
 
 	$: {
@@ -91,10 +98,10 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $links as link (link.id)}
+		{#each $links.items as link (link.id)}
 			<Link on:open={onOpen} on:delete={onDelete} {link}></Link>
 		{/each}
-		{#if $links.length === 0 && !isLoading}
+		{#if $links.count === 0 && !isLoading}
 			<div class="p-4 text-center">no links found</div>
 		{/if}
 	</Listgroup>

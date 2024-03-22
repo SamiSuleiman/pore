@@ -14,6 +14,7 @@ import { JwtPayload } from 'src/core/auth.model';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { Roles } from 'src/core/guards/roles.decorator';
 import { TagPreviewDto, UpsertTagDto } from './tag.dto';
+import { List } from '../model';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -24,8 +25,8 @@ export class TagController {
   @Get()
   async findAll(
     @Req() req: Express.Request & { user: JwtPayload },
-  ): Promise<TagPreviewDto[]> {
-    return await this.tagService.findAll(req.user.sub);
+  ): Promise<List<TagPreviewDto>> {
+    return await this.tagService.findAll(req.user.sub, 0);
   }
 
   @Get(':id')

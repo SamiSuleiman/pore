@@ -5,6 +5,8 @@ import { Word } from 'src/core/entities/word.entity';
 import { SourceMapper } from 'src/core/mappers/source.mapper';
 import { In, Repository } from 'typeorm';
 import { SourcePreviewDto, SourceDto, UpsertSourceDto } from './source.dto';
+import { List } from '../model';
+import { PAGE_SIZE } from 'src/consts';
 
 @Injectable()
 export class SourceService {
@@ -13,9 +15,24 @@ export class SourceService {
     @InjectRepository(Word) private readonly wordRepo: Repository<Word>,
   ) {}
 
-  async findAll(ownerId: string): Promise<SourcePreviewDto[]> {
-    const _sources = await this.sourceRepo.find({ where: { userId: ownerId } });
-    return _sources.map((source) => SourceMapper.toPreview(source));
+  async findAll(
+    ownerId: string,
+    page: number,
+  ): Promise<List<SourcePreviewDto>> {
+    const _sourcesCount = await this.sourceRepo.count({
+      where: { userId: ownerId },
+    });
+    const _pagedSources = await this.sourceRepo
+      .createQueryBuilder()
+      .where('userId = :userId', { userId: ownerId })
+      .skip(page * PAGE_SIZE)
+      .take(PAGE_SIZE)
+      .getMany();
+
+    return {
+      items: _pagedSources.map((source) => SourceMapper.toPreview(source)),
+      count: _sourcesCount,
+    };
   }
 
   async findOne(id: string, ownerId: string): Promise<SourceDto> {

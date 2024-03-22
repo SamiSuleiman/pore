@@ -1,13 +1,14 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
 import { invalidateCache } from '$lib/invalidate';
+import type { List } from '$lib/models';
 import { isOutdated } from '../../stores/source.store';
 import type { SourceDto, SourcePreviewDto, UpsertSourceDto } from './model';
 
 const SOURCE_URL = `${env.baseUrl}/sources`;
 
-export async function getSources(): Promise<SourcePreviewDto[] | undefined> {
-	const _res = await get<SourcePreviewDto[]>(`${SOURCE_URL}`);
+export async function getSources(): Promise<List<SourcePreviewDto> | undefined> {
+	const _res = await get<List<SourcePreviewDto>>(`${SOURCE_URL}`);
 	if (_res) isOutdated.set(false);
 	return _res;
 }

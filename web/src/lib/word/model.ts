@@ -3,18 +3,18 @@ import type { SourcePreviewDto } from '$lib/source/model';
 import type { TagPreviewDto } from '$lib/tag/model';
 
 export interface WordPreviewDto {
-	id: string;
-	content: string;
-	tags: TagPreviewDto[];
-	links: LinkPreviewDto[];
-	source?: SourcePreviewDto;
-	language: string;
+  id: string;
+  content: string;
+  tags: TagPreviewDto[];
+  links: LinkPreviewDto[];
+  source?: SourcePreviewDto;
+  language: string;
 }
 
-export interface WordDto extends WordPreviewDto {
-	definitions: DefinitionDto[];
-	examples: ExampleDto[];
-	links: LinkDto[];
+export interface WordDto extends Omit<WordPreviewDto, 'links'> {
+  definitions: DefinitionDto[];
+  examples: ExampleDto[];
+  links: LinkDto[];
 }
 
 export interface UpdateWordDto {

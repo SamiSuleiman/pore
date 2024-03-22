@@ -9,6 +9,8 @@ import { Word } from 'src/core/entities/word.entity';
 import { WordMapper } from 'src/core/mappers/word.mapper';
 import { In, Repository } from 'typeorm';
 import { WordPreviewDto, WordDto, UpsertWordDto } from './word.dto';
+import { PAGE_SIZE } from 'src/consts';
+import { List } from '../model';
 
 @Injectable()
 export class WordService {
@@ -24,23 +26,29 @@ export class WordService {
     private readonly definitionRepo: Repository<Definition>,
   ) {}
 
-  async findAll(ownerId: string): Promise<WordPreviewDto[]> {
-    const _words = await this.wordRepo.find({
+  async findAll(ownerId: string, page: number): Promise<List<WordPreviewDto>> {
+    const allWordsCount = await this.wordRepo.count({
       where: { userId: ownerId },
-      relations: {
-        tags: true,
-        links: {
-          words: true,
-        },
-        source: true,
-      },
     });
-    return _words.map((word) =>
-      WordMapper.toPreview({
-        ...word,
-        links: word.links.filter((link) => link.words?.length > 1) ?? [],
-      }),
-    );
+    const _pagedWords = await this.wordRepo
+      .createQueryBuilder('word')
+      .where('word.userId = :ownerId', { ownerId })
+      .skip(page * PAGE_SIZE)
+      .take(PAGE_SIZE)
+      .leftJoinAndMapMany('word.links', 'word.links', 'link')
+      .leftJoinAndMapMany('word.tags', 'word.tags', 'tag')
+      .leftJoinAndMapOne('word.source', 'word.source', 'source')
+      .getMany();
+
+    return {
+      items: _pagedWords.map((word) =>
+        WordMapper.toPreview({
+          ...word,
+          links: word.links.filter((link) => link.words?.length > 1) ?? [],
+        }),
+      ),
+      count: allWordsCount,
+    };
   }
 
   async findOne(id: string, ownerId: string): Promise<WordDto> {
