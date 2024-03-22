@@ -1,7 +1,9 @@
 import { dev } from '$app/environment';
 
 const _prodEnv : Env= {
-	baseUrl: 'https://api.example.com'
+	// baseUrl: 'https://pore.mmayss.com/api'
+	// just for now for docker thing test
+	baseUrl: 'http://localhost:3000/api'
 }
 
 const _devEnv : Env= {

@@ -6,10 +6,13 @@ services:
       context: ./server
       dockerfile: Dockerfile
     container_name: nest
+    restart: unless-stopped
+    environment:
+      - DB_HOST=db
+    env_file:
+      - ./server/.env
     ports:
       - "127.0.0.1:3000:3000"
-    expose:
-      - 3000
     depends_on:
       - db
     networks:
@@ -20,8 +23,13 @@ services:
       context: ./web
       dockerfile: Dockerfile
     container_name: web
+    restart: unless-stopped
+    environment:
+      - PORT=4200
     ports:
       - "127.0.0.1:4200:4200"
+    expose:
+      - "4200"
     depends_on:
       - nest
     networks:

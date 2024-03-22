@@ -1,4 +1,4 @@
-ARG IMG=node:18-alpine
+ARG IMG=node:20-alpine
 
 # prod build stage
 FROM ${IMG} AS prod-build
