@@ -1,17 +1,21 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
 import { invalidateCache } from '$lib/invalidate';
-import type { List } from '$lib/models';
+import type { FilterDto, List } from '$lib/models';
 import { isOutdated } from '../../stores/word.store';
 import { type AddWordDto, type UpdateWordDto, type WordDto, type WordPreviewDto } from './model';
 
 const WORDS_URL = `${env.baseUrl}/words`;
 
-export async function getWords(): Promise<List<WordPreviewDto> | undefined> {
-	const _url = `${WORDS_URL}?` + new URLSearchParams({filter: JSON.stringify({
-		page: 0,
-		pageSize: 10
-	})});
+export async function getWords(filter?: FilterDto): Promise<List<WordPreviewDto> | undefined> {
+	const _url =
+		`${WORDS_URL}?` +
+		new URLSearchParams({
+			filter: JSON.stringify({
+				page: filter?.page ?? 0,
+				pageSize: filter?.pageSize ?? 10,
+			}),
+		});
 	const _res = await get<List<WordPreviewDto>>(_url);
 	if (_res) isOutdated.set(false);
 	return _res;

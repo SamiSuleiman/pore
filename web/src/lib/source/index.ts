@@ -1,14 +1,22 @@
 import { env } from '$lib/env';
 import { del, get, post, put } from '$lib/http';
 import { invalidateCache } from '$lib/invalidate';
-import type { List } from '$lib/models';
+import type { FilterDto, List } from '$lib/models';
 import { isOutdated } from '../../stores/source.store';
 import type { SourceDto, SourcePreviewDto, UpsertSourceDto } from './model';
 
 const SOURCE_URL = `${env.baseUrl}/sources`;
 
-export async function getSources(): Promise<List<SourcePreviewDto> | undefined> {
-	const _res = await get<List<SourcePreviewDto>>(`${SOURCE_URL}`);
+export async function getSources(filter?: FilterDto): Promise<List<SourcePreviewDto> | undefined> {
+	const _url =
+		`${SOURCE_URL}?` +
+		new URLSearchParams({
+			filter: JSON.stringify({
+				page: filter?.page ?? 0,
+				pageSize: filter?.pageSize ?? 10,
+			}),
+		});
+	const _res = await get<List<SourcePreviewDto>>(_url);
 	if (_res) isOutdated.set(false);
 	return _res;
 }
