@@ -10,6 +10,7 @@
 		"strict": true,
 		"moduleResolution": "bundler",
 		"strictPropertyInitialization": false,
+		"lib": ["ESNext", "DOM", "ES15"],
 		"paths": {
 			"$lib/*": ["src/lib/*"],
     },

@@ -75,7 +75,7 @@
 	<div class="flex h-32 items-center justify-center">
 		<Spinner class="h-8 w-8 text-primary-500" />
 	</div>
-{:then words}
+{:then list}
 	<div class="flex flex-col gap-2">
 		{#if tag}
 			<slot class="bg-neutral-800 text-white" name="detailMode" />
@@ -105,7 +105,7 @@
 				<div class="mb-4">
 					<MultiSelect
 						disabled={isSubmitting}
-						choices={(words ? words : []).map((w) => ({ value: w.id, name: w.content }))}
+						choices={(list ? list.items : []).map((w) => ({ value: w.id, name: w.content }))}
 						label="words"
 						bind:value={form.wordIds}
 					></MultiSelect>

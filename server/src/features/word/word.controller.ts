@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,7 +15,7 @@ import { Roles } from 'src/core/guards/roles.decorator';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { UpsertWordDto, WordDto, WordPreviewDto } from './word.dto';
 import { JwtPayload } from 'src/core/auth.model';
-import { List } from '../model';
+import { FilterDto, List } from '../model';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -25,8 +26,11 @@ export class WordController {
   @Get()
   async findAll(
     @Req() req: Request & { user: JwtPayload },
+    @Query('filter') filter: FilterDto,
   ): Promise<List<WordPreviewDto>> {
-    return await this.wordService.findAll(req.user.sub, 0);
+    const _page = filter.page ? filter.page : 0;
+    console.log(_page);
+    return await this.wordService.findAll(req.user.sub, _page);
   }
 
   @Get(':id')

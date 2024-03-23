@@ -8,7 +8,11 @@ import { type AddWordDto, type UpdateWordDto, type WordDto, type WordPreviewDto 
 const WORDS_URL = `${env.baseUrl}/words`;
 
 export async function getWords(): Promise<List<WordPreviewDto> | undefined> {
-	const _res = await get<List<WordPreviewDto>>(`${WORDS_URL}`);
+	const _url = `${WORDS_URL}?` + new URLSearchParams({filter: JSON.stringify({
+		page: 0,
+		pageSize: 10
+	})});
+	const _res = await get<List<WordPreviewDto>>(_url);
 	if (_res) isOutdated.set(false);
 	return _res;
 }
