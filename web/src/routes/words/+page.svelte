@@ -114,7 +114,7 @@
 	}
 </script>
 
-<div class="flex w-full flex-col bg-neutral-800 sm:p-4">
+<div class="flex w-full flex-col gap-5 bg-neutral-800 sm:p-4">
 	<Button
 		on:click={() => onOpen()}
 		color="none"
@@ -122,6 +122,22 @@
 	>
 		<PlusSolid></PlusSolid>
 	</Button>
+	{#if words.count > 0}
+		<Pagination
+			on:click={onPaginate}
+			ulClass="flex justify-center align-middle"
+			class=""
+			activeClass="text-white border bg-primary-900 hover:bg-primary-800 hover:text-white"
+			normalClass="text-gray-500 bg-white hover:bg-primary-800 hover:text-white bg-neutral-800"
+			pages={pagerPages}
+			on:previous={() => {
+				if (currPage > 1) onPaginate(currPage - 1);
+			}}
+			on:next={() => {
+				if (currPage < pages.length) onPaginate(currPage + 1);
+			}}
+		/>
+	{/if}
 	<Listgroup
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
@@ -170,18 +186,20 @@
 			</svelte:fragment>
 		</Open>
 	</Modal>
-	<Pagination
-		on:click={onPaginate}
-		ulClass="flex justify-center align-middle"
-		class=""
-		activeClass="text-white border bg-primary-900 hover:bg-primary-800 hover:text-white"
-		normalClass="text-gray-500 bg-white hover:bg-primary-800 hover:text-white bg-neutral-800"
-		pages={pagerPages}
-		on:previous={() => {
-			if (currPage > 1) onPaginate(currPage - 1);
-		}}
-		on:next={() => {
-			if (currPage < pages.length) onPaginate(currPage + 1);
-		}}
-	/>
+	{#if words.count > 0}
+		<Pagination
+			on:click={onPaginate}
+			ulClass="flex justify-center align-middle"
+			class=""
+			activeClass="text-white border bg-primary-900 hover:bg-primary-800 hover:text-white"
+			normalClass="text-gray-500 bg-white hover:bg-primary-800 hover:text-white bg-neutral-800"
+			pages={pagerPages}
+			on:previous={() => {
+				if (currPage > 1) onPaginate(currPage - 1);
+			}}
+			on:next={() => {
+				if (currPage < pages.length) onPaginate(currPage + 1);
+			}}
+		/>
+	{/if}
 </div>
