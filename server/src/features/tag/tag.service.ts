@@ -20,8 +20,8 @@ export class TagService {
     const _pagedTags = await this.tagRepo
       .createQueryBuilder()
       .where('userId = :userId', { userId: ownerId })
-      .skip(page * PAGE_SIZE)
-      .take(PAGE_SIZE)
+      .skip(page === -1 ? undefined : page * PAGE_SIZE)
+      .take(page === -1 ? undefined : PAGE_SIZE)
       .getMany();
 
     return {

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,7 +15,7 @@ import { JwtPayload } from 'src/core/auth.model';
 import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { Roles } from 'src/core/guards/roles.decorator';
 import { TagPreviewDto, UpsertTagDto } from './tag.dto';
-import { List } from '../model';
+import { FilterDto, List } from '../model';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -25,8 +26,11 @@ export class TagController {
   @Get()
   async findAll(
     @Req() req: Express.Request & { user: JwtPayload },
+    @Query('filter') filter: string,
   ): Promise<List<TagPreviewDto>> {
-    return await this.tagService.findAll(req.user.sub, 0);
+    const _parsedFilter = JSON.parse(filter) as FilterDto;
+    const _page = _parsedFilter.page ? _parsedFilter.page : 0;
+    return await this.tagService.findAll(req.user.sub, _page);
   }
 
   @Get(':id')

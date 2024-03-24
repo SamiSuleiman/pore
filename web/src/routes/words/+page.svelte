@@ -28,7 +28,7 @@
 	let pages = getPages(10, words?.count ?? 0);
 	let pagerPages: { name: string; active: boolean }[] = [];
 
-	$: currPage = 1;
+	let currPage = 1;
 
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
