@@ -76,7 +76,7 @@
 	}
 </script>
 
-{#await getWords()}
+{#await getWords({ page: -1 })}
 	<div class="flex h-32 items-center justify-center">
 		<Spinner class="h-8 w-8 text-primary-500" />
 	</div>
