@@ -28,18 +28,18 @@ export async function getLink(id: string): Promise<LinkDto | undefined> {
 
 export async function addLink(link: UpsertLinkDto): Promise<boolean> {
 	const _res = await post<UpsertLinkDto>(`${LINK_URL}`, link);
-	if (_res) invalidateCache('link', 'word', 'profile');
+	if (_res) invalidateCache('link', 'profile');
 	return _res;
 }
 
 export async function updateLink(id: string, link: UpsertLinkDto): Promise<boolean> {
 	const _res = await put<UpsertLinkDto>(`${LINK_URL}/${id}`, link);
-	if (_res) invalidateCache('link', 'word', 'profile');
+	if (_res) invalidateCache('link', 'profile');
 	return _res;
 }
 
 export async function deleteLink(id: string): Promise<boolean> {
 	const _res = await del(`${LINK_URL}/${id}`);
-	if (_res) invalidateCache('link', 'word', 'profile');
+	if (_res) invalidateCache('link', 'profile');
 	return _res;
 }

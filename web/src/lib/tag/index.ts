@@ -28,18 +28,18 @@ export async function getTag(id: string): Promise<TagDto | undefined> {
 
 export async function addTag(tag: UpsertTagDto): Promise<boolean> {
 	const _res = await post<UpsertTagDto>(`${TAGS_URL}`, tag);
-	if (_res) invalidateCache('tag', 'word', 'profile');
+	if (_res) invalidateCache('tag', 'profile');
 	return _res;
 }
 
 export async function updateTag(id: string, tag: UpsertTagDto): Promise<boolean> {
 	const _res = await put<UpsertTagDto>(`${TAGS_URL}/${id}`, tag);
-	if (_res) invalidateCache('tag', 'word', 'profile');
+	if (_res) invalidateCache('tag', 'profile');
 	return _res;
 }
 
 export async function deleteTag(id: string): Promise<boolean> {
 	const _res = await del(`${TAGS_URL}/${id}`);
-	if (_res) invalidateCache('tag', 'word', 'profile');
+	if (_res) invalidateCache('tag', 'profile');
 	return _res;
 }

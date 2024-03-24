@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { words, isOutdated } from '../../stores/word.store';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
 	import { Listgroup, Pagination } from 'flowbite-svelte';
@@ -10,8 +9,9 @@
 	import { FireSolid, PenSolid, UndoSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Open from './components/Open.svelte';
-	import type { WordDto } from '$lib/word/model';
+	import type { WordDto, WordPreviewDto } from '$lib/word/model';
 	import { getPages } from '../shared/pager';
+	import type { List } from '$lib/models';
 
 	const upsertBtnStyle =
 		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
@@ -21,7 +21,11 @@
 	let isUpsertMode = false;
 	let hasError: null | string = null;
 	let isLoading = true;
-	let pages = getPages(10, $words.count);
+	let words: List<WordPreviewDto> = {
+		items: [],
+		count: 0,
+	};
+	let pages = getPages(10, words?.count ?? 0);
 	let pagerPages: { name: string; active: boolean }[] = [];
 
 	$: currPage = 1;
@@ -29,14 +33,13 @@
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($words.items.length === 0 || $isOutdated)
-			$words = (await getWords()) ?? { items: [], count: 0 };
+		if (!words || words.count === 0) words = (await getWords()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
 
 	$: {
-		pages = getPages(10, $words.count);
+		pages = getPages(10, words.count);
 
 		const _pagerPages = pages.slice(currPage - 1, currPage + 3).map((page) => {
 			const _page = currPage.toString();
@@ -50,10 +53,11 @@
 	}
 
 	async function onPaginate(event: any): Promise<void> {
-		const _page = parseInt(event.target.text);
+		let _page = event;
+		if (typeof event !== 'number') _page = parseInt(event.target.innerText);
 		if (_page === currPage) return;
 		currPage = _page;
-		$words = (await getWords({ page: _page - 1 })) ?? { items: [], count: 0 };
+		words = (await getWords({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	async function onDelete(event: CustomEvent<string>): Promise<void> {
@@ -66,9 +70,9 @@
 			return;
 		}
 
-		$words = {
-			items: $words.items.filter((w) => w.id !== _id),
-			count: $words.count - 1,
+		words = {
+			items: words.items.filter((w) => w.id !== _id),
+			count: words.count - 1,
 		};
 	}
 
@@ -101,7 +105,7 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$words = (await getWords()) ?? { items: [], count: 0 };
+		words = (await getWords({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	$: {
@@ -122,10 +126,10 @@
 		active
 		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
 	>
-		{#each $words.items as word (word.id)}
+		{#each words.items as word (word.id)}
 			<Word on:open={onOpen} on:delete={onDelete} {word}></Word>
 		{/each}
-		{#if $words.count === 0 && !isLoading}
+		{#if words.count === 0 && !isLoading}
 			<div class="p-4 text-center">no words found</div>
 		{/if}
 	</Listgroup>
@@ -174,10 +178,10 @@
 		normalClass="text-gray-500 bg-white hover:bg-primary-800 hover:text-white bg-neutral-800"
 		pages={pagerPages}
 		on:previous={() => {
-			if (currPage > 1) onPaginate({ target: { text: (currPage - 1).toString() } });
+			if (currPage > 1) onPaginate(currPage - 1);
 		}}
 		on:next={() => {
-			if (currPage < pages.length) onPaginate({ target: { text: (currPage + 1).toString() } });
+			if (currPage < pages.length) onPaginate(currPage + 1);
 		}}
 	/>
 </div>
