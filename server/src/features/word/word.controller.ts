@@ -26,10 +26,10 @@ export class WordController {
   @Get()
   async findAll(
     @Req() req: Request & { user: JwtPayload },
-    @Query('filter') filter: FilterDto,
+    @Query('filter') filter: string,
   ): Promise<List<WordPreviewDto>> {
-    const _page = filter.page ? filter.page : 0;
-    console.log(_page);
+    const _parsedFilter = JSON.parse(filter) as FilterDto;
+    const _page = _parsedFilter.page ? _parsedFilter.page : 0;
     return await this.wordService.findAll(req.user.sub, _page);
   }
 

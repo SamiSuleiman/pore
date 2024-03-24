@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body class="bg-neutral-800" data-sveltekit-preload-data="hover">
-		<main class="m-auto flex max-w-4xl flex-1 flex-col">
-			<div style="display: contents">%sveltekit.body%</div>
-		</main>
-	</body>
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	%sveltekit.head%
+</head>
+
+<body class="scroll-smooth bg-neutral-800" data-sveltekit-preload-data="hover">
+	<main class="m-auto flex max-w-4xl flex-1 flex-col">
+		<div style="display: contents">%sveltekit.body%</div>
+	</main>
+</body>
+
 </html>

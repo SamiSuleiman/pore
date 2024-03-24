@@ -33,6 +33,7 @@ export class WordService {
     const _pagedWords = await this.wordRepo
       .createQueryBuilder('word')
       .where('word.userId = :ownerId', { ownerId })
+      .orderBy('word.createdAt', 'DESC')
       .skip(page * PAGE_SIZE)
       .take(PAGE_SIZE)
       .leftJoinAndMapMany('word.links', 'word.links', 'link')

@@ -27,4 +27,7 @@ export class Link {
 
   @ManyToMany(() => Word, (word) => word.links, { onDelete: 'CASCADE' })
   words: Word[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 }

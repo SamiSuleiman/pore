@@ -52,4 +52,7 @@ export class Word {
   @JoinTable()
   @OneToMany(() => Example, (example) => example.word)
   examples: Example[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 }

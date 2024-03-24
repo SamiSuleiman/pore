@@ -27,4 +27,7 @@ export class Source {
 
   @OneToMany(() => Word, (word) => word.source)
   words: Word[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 }

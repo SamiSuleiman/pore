@@ -5,12 +5,14 @@
 	import { words, isOutdated } from '../../stores/word.store';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
-	import { Listgroup } from 'flowbite-svelte';
+	import { Listgroup, Pagination } from 'flowbite-svelte';
 	import { Toast } from 'flowbite-svelte';
 	import { FireSolid, PenSolid, UndoSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { Spinner, Modal, Button } from 'flowbite-svelte';
 	import Open from './components/Open.svelte';
 	import type { WordDto } from '$lib/word/model';
+	import { page } from '$app/stores';
+	import { getPages } from '../shared/pager';
 
 	const upsertBtnStyle =
 		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
@@ -20,6 +22,34 @@
 	let isUpsertMode = false;
 	let hasError: null | string = null;
 	let isLoading = true;
+	let pages = getPages(10, $words.count);
+	let pagerPages: { name: string; active: boolean; href: string }[] = [];
+
+	$: currPage = $page.url.searchParams.get('page')
+		? parseInt($page.url.searchParams.get('page') ?? '1')
+		: 1;
+
+	$: {
+		pages = getPages(10, $words.count);
+
+		const _pagerPages = pages.slice(currPage - 1, currPage + 3).map((page) => {
+			const _page = $page.url.searchParams.get('page') ?? '1';
+			const _isActive = page.name === _page;
+			return {
+				name: page.name,
+				active: _isActive,
+				href: _isActive ? '' : `?page=${page.name}`,
+			};
+		});
+		pagerPages = _pagerPages;
+	}
+
+	$: {
+		(async () => {
+			console.log('isOutdated', $isOutdated);
+			$words = (await getWords({ page: currPage - 1 })) ?? { items: [], count: 0 };
+		})();
+	}
 
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
@@ -140,4 +170,17 @@
 			</svelte:fragment>
 		</Open>
 	</Modal>
+	<Pagination
+		ulClass="flex justify-center align-middle"
+		class=""
+		activeClass="text-white border bg-primary-900 hover:bg-primary-800 hover:text-white"
+		normalClass="text-gray-500 bg-white hover:bg-primary-800 hover:text-white bg-neutral-800"
+		pages={pagerPages}
+		on:previous={() => {
+			if (currPage > 1) goto(`?page=${currPage - 1}`);
+		}}
+		on:next={() => {
+			if (currPage < pages.length) goto(`?page=${currPage + 1}`);
+		}}
+	/>
 </div>

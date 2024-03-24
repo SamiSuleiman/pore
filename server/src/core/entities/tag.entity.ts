@@ -27,4 +27,7 @@ export class Tag {
 
   @ManyToMany(() => Word, (word) => word.tags, { onDelete: 'CASCADE' })
   words: Word[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 }
