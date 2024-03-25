@@ -122,7 +122,7 @@
 	on:close={onClose}
 	on:delete={onDelete}
 	on:create={onCreate}
-	list={tags}
+	showPagination={tags.count > 10 || currPage > 1}
 	{pagerPages}
 	{isLoading}
 	{hasError}

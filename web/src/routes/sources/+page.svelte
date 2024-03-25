@@ -123,7 +123,7 @@
 	on:close={onClose}
 	on:delete={onDelete}
 	on:create={onCreate}
-	list={sources}
+	showPagination={sources.count > 10 || currPage > 1}
 	{pagerPages}
 	{isLoading}
 	{hasError}

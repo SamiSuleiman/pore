@@ -125,7 +125,7 @@
 	on:close={onClose}
 	on:delete={onDelete}
 	on:create={onCreate}
-	list={words}
+	showPagination={words.count > 10 || currPage > 1}
 	{pagerPages}
 	{isLoading}
 	{hasError}

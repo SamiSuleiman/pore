@@ -1,17 +1,16 @@
 <script lang="ts">
-	import type { List } from '$lib/models';
 	import { Button, Listgroup, Modal, Pagination, Spinner, Toast } from 'flowbite-svelte';
 	import { FireSolid, PlusSolid } from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
 
 	export const dispatch = createEventDispatcher();
 
-	export let list: List<any> = { items: [], count: 0 };
 	export let pagerPages: { name: string; active: boolean }[] = [];
 	export let isLoading = false;
 	export let hasError: null | string = null;
 	export let modalTitle = '';
 	export let isOpen = false;
+	export let showPagination = true;
 </script>
 
 <div class="flex w-full flex-col gap-5 bg-neutral-800 sm:p-4">
@@ -22,7 +21,7 @@
 	>
 		<PlusSolid></PlusSolid>
 	</Button>
-	{#if list.count > 0}
+	{#if showPagination}
 		<Pagination
 			on:click={(e) => dispatch('paginate', e)}
 			ulClass="flex justify-center align-middle"
@@ -66,7 +65,7 @@
 	>
 		<slot name="open" />
 	</Modal>
-	{#if list.count > 0}
+	{#if showPagination}
 		<Pagination
 			on:click={(e) => dispatch('paginate', e)}
 			ulClass="flex justify-center align-middle"
