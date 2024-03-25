@@ -2,14 +2,15 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { links } from '../../stores/link.store';
 	import Link from './components/Link.svelte';
-	import { Button, Listgroup, Modal, Spinner, Toast } from 'flowbite-svelte';
+	import { Button } from 'flowbite-svelte';
 	import { deleteLink, getLink, getLinks } from '$lib/link';
-	import type { LinkDto } from '$lib/link/model';
-	import { isOutdated } from '../../stores/link.store';
-	import { FireSolid, PenSolid, PlusSolid, UndoSolid } from 'flowbite-svelte-icons';
+	import type { LinkDto, LinkPreviewDto } from '$lib/link/model';
+	import { PenSolid, UndoSolid } from 'flowbite-svelte-icons';
 	import Open from './components/Open.svelte';
+	import type { List } from '$lib/models';
+	import { getPages } from '../shared/pager';
+	import ItemsList from '../components/ItemsList.svelte';
 
 	const upsertBtnStyle =
 		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
@@ -19,15 +20,41 @@
 	let isUpsertMode = false;
 	let hasError: null | string = null;
 	let isLoading = true;
+	let links: List<LinkPreviewDto> = { items: [], count: 0 };
+	let pages = getPages(10, links?.count ?? 0);
+	let pagerPages: { name: string; active: boolean }[] = [];
+
+	let currPage = 1;
 
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($links.items.length === 0 || $isOutdated)
-			$links = (await getLinks()) ?? { items: [], count: 0 };
+		if (!links || links.count === 0) links = (await getLinks()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
+
+	$: {
+		pages = getPages(10, links.count);
+
+		const _pagerPages = pages.slice(currPage - 1, currPage + 3).map((page) => {
+			const _page = currPage.toString();
+			const _isActive = page.name === _page;
+			return {
+				name: page.name,
+				active: _isActive,
+			};
+		});
+		pagerPages = _pagerPages;
+	}
+
+	async function onPaginate(event: any): Promise<void> {
+		let _page = event;
+		if (typeof event !== 'number') _page = parseInt(event.target.innerText);
+		if (_page === currPage) return;
+		currPage = _page;
+		links = (await getLinks({ page: currPage - 1 })) ?? { items: [], count: 0 };
+	}
 
 	async function onDelete(event: CustomEvent<string>): Promise<void> {
 		const _id = event.detail;
@@ -39,9 +66,9 @@
 			return;
 		}
 
-		$links = {
-			items: $links.items.filter((l) => l.id !== _id),
-			count: $links.count - 1,
+		links = {
+			items: links.items.filter((w) => w.id !== _id),
+			count: links.count - 1,
 		};
 	}
 
@@ -74,10 +101,7 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$links = (await getLinks()) ?? {
-			items: [],
-			count: 0,
-		};
+		links = (await getLinks({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	$: {
@@ -86,49 +110,34 @@
 	}
 </script>
 
-<div class="flex w-full flex-col bg-neutral-800 sm:p-4">
-	<Button
-		on:click={() => onOpen()}
-		color="none"
-		class="text-primary-900 ring-neutral-800 hover:text-primary-700"
-	>
-		<PlusSolid></PlusSolid>
-	</Button>
-	<Listgroup
-		active
-		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
-	>
-		{#each $links.items as link (link.id)}
+<ItemsList
+	on:paginate={(e) => onPaginate(e.detail)}
+	on:previous={() => {
+		if (currPage > 1) onPaginate(currPage - 1);
+	}}
+	on:next={() => {
+		if (currPage < pages.length) onPaginate(currPage + 1);
+	}}
+	on:open={onOpen}
+	on:close={onClose}
+	on:delete={onDelete}
+	on:create={onCreate}
+	list={links}
+	{pagerPages}
+	{isLoading}
+	{hasError}
+	{modalTitle}
+	{isOpen}
+>
+	<svelte:fragment slot="items">
+		{#each links.items as link (link.id)}
 			<Link on:open={onOpen} on:delete={onDelete} {link}></Link>
 		{/each}
-		{#if $links.count === 0 && !isLoading}
-			<div class="p-4 text-center">no links found</div>
+		{#if links.count === 0 && !isLoading}
+			<div class="p-4 text-center">no words found</div>
 		{/if}
-	</Listgroup>
-	{#if hasError}
-		<Toast
-			class="z-50"
-			divClass="w-full max-w-xs p-4 text-white bg-primary-900 shadow gap-3"
-			on:close={() => (hasError = null)}
-			position="bottom-right"
-			color="red"
-		>
-			<FireSolid slot="icon" />
-			<span>{hasError}</span>
-		</Toast>
-	{/if}
-	{#if isLoading}
-		<div class="flex h-32 items-center justify-center">
-			<Spinner class="h-8 w-8 text-primary-500" />
-		</div>
-	{/if}
-	<Modal
-		color="none"
-		defaultClass="max-h-full bg-neutral-800 text-white relative flex flex-col mx-auto"
-		title={modalTitle}
-		bind:open={isOpen}
-		on:close={onClose}
-	>
+	</svelte:fragment>
+	<div slot="open">
 		<Open link={selectedLink} {isUpsertMode} on:create={onCreate}>
 			<svelte:fragment slot="upsertMode">
 				<Button size="sm" on:click={() => (isUpsertMode = false)} outline class={upsertBtnStyle}>
@@ -141,5 +150,5 @@
 				</Button>
 			</svelte:fragment>
 		</Open>
-	</Modal>
-</div>
+	</div>
+</ItemsList>

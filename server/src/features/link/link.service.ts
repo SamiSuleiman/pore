@@ -22,8 +22,8 @@ export class LinkService {
     const _pagedLinks = await this.linkRepo
       .createQueryBuilder('link')
       .where('link.userId = :userId', { userId: ownerId })
-      .skip(page * PAGE_SIZE)
-      .take(PAGE_SIZE)
+      .skip(page === -1 ? undefined : page * PAGE_SIZE)
+      .take(page === -1 ? undefined : PAGE_SIZE)
       .leftJoinAndMapMany('link.words', 'link.words', 'word')
       .leftJoinAndMapMany('word.tags', 'word.tags', 'tag')
       .leftJoinAndMapMany('word.links', 'word.links', 'links')
