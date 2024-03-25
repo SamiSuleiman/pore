@@ -59,10 +59,7 @@
 			return;
 		}
 
-		sources = {
-			items: sources.items.filter((w) => w.id !== _id),
-			count: sources.count - 1,
-		};
+		sources = (await getSources({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {

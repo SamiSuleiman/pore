@@ -69,10 +69,7 @@
 			return;
 		}
 
-		words = {
-			items: words.items.filter((w) => w.id !== _id),
-			count: words.count - 1,
-		};
+		words = (await getWords({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {

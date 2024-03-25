@@ -66,10 +66,7 @@
 			return;
 		}
 
-		tags = {
-			items: tags.items.filter((w) => w.id !== _id),
-			count: tags.count - 1,
-		};
+		tags = (await getTags({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {

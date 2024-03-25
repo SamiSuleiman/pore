@@ -66,10 +66,7 @@
 			return;
 		}
 
-		links = {
-			items: links.items.filter((w) => w.id !== _id),
-			count: links.count - 1,
-		};
+		links = (await getLinks({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	async function onOpen(event?: CustomEvent<string>): Promise<void> {
