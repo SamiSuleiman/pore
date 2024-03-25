@@ -25,8 +25,8 @@ export class SourceService {
     const _pagedSources = await this.sourceRepo
       .createQueryBuilder()
       .where('userId = :userId', { userId: ownerId })
-      .skip(page * PAGE_SIZE)
-      .take(PAGE_SIZE)
+      .skip(page === -1 ? undefined : page * PAGE_SIZE)
+      .take(page === -1 ? undefined : PAGE_SIZE)
       .getMany();
 
     return {

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,7 +15,7 @@ import { LoggedInGuard } from 'src/core/guards/logged-in.guard';
 import { Roles } from 'src/core/guards/roles.decorator';
 import { SourcePreviewDto, UpsertSourceDto } from './source.dto';
 import { SourceService } from './source.service';
-import { List } from '../model';
+import { FilterDto, List } from '../model';
 
 @Roles('admin', 'user')
 @UseGuards(LoggedInGuard)
@@ -25,8 +26,11 @@ export class SourceController {
   @Get()
   async findAll(
     @Req() req: Express.Request & { user: JwtPayload },
+    @Query('filter') filter: string,
   ): Promise<List<SourcePreviewDto>> {
-    return await this.sourceService.findAll(req.user.sub, 0);
+    const _parsedFilter = JSON.parse(filter) as FilterDto;
+    const _page = _parsedFilter.page ? _parsedFilter.page : 0;
+    return await this.sourceService.findAll(req.user.sub, _page);
   }
 
   @Get(':id')

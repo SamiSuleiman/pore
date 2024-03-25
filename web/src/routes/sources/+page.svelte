@@ -2,14 +2,15 @@
 	import { onMount } from 'svelte';
 	import { isLoggedIn } from '../../stores/auth.store';
 	import { goto } from '$app/navigation';
-	import { sources } from '../../stores/source.store';
 	import Source from './components/Source.svelte';
-	import { Button, Listgroup, Modal, Spinner, Toast } from 'flowbite-svelte';
+	import { Button } from 'flowbite-svelte';
 	import { deleteSource, getSource, getSources } from '$lib/source';
-	import type { SourceDto } from '$lib/source/model';
-	import { isOutdated } from '../../stores/source.store';
-	import { FireSolid, PenSolid, PlusSolid, UndoSolid } from 'flowbite-svelte-icons';
+	import type { SourceDto, SourcePreviewDto } from '$lib/source/model';
+	import { PenSolid, UndoSolid } from 'flowbite-svelte-icons';
 	import Open from './components/Open.svelte';
+	import ItemsList from '../components/ItemsList.svelte';
+	import { getPages } from '../shared/pager';
+	import type { List } from '$lib/models';
 
 	const upsertBtnStyle =
 		'border-primary-900 bg-neutral-800 text-primary-900 hover:border-primary-700 hover:bg-neutral-800 hover:text-primary-700 active:ring-0';
@@ -20,14 +21,33 @@
 	let hasError: null | string = null;
 	let isLoading = true;
 
+	let sources: List<SourcePreviewDto> = { items: [], count: 0 };
+	let pages = getPages(10, sources?.count ?? 0);
+	let pagerPages: { name: string; active: boolean }[] = [];
+
+	let currPage = 1;
+
 	onMount(async () => {
 		if (!$isLoggedIn) goto('/');
 
-		if ($sources.items.length === 0 || $isOutdated)
-			$sources = (await getSources()) ?? { items: [], count: 0 };
+		if (!sources || sources.count === 0) sources = (await getSources()) ?? { items: [], count: 0 };
 
 		isLoading = false;
 	});
+
+	$: {
+		pages = getPages(10, sources.count);
+
+		const _pagerPages = pages.slice(currPage - 1, currPage + 3).map((page) => {
+			const _page = currPage.toString();
+			const _isActive = page.name === _page;
+			return {
+				name: page.name,
+				active: _isActive,
+			};
+		});
+		pagerPages = _pagerPages;
+	}
 
 	async function onDelete(event: CustomEvent<string>): Promise<void> {
 		const _id = event.detail;
@@ -39,9 +59,9 @@
 			return;
 		}
 
-		$sources = {
-			items: $sources.items.filter((s) => s.id !== _id),
-			count: $sources.count - 1,
+		sources = {
+			items: sources.items.filter((w) => w.id !== _id),
+			count: sources.count - 1,
 		};
 	}
 
@@ -67,6 +87,14 @@
 		}
 	}
 
+	async function onPaginate(event: any): Promise<void> {
+		let _page = event;
+		if (typeof event !== 'number') _page = parseInt(event.target.innerText);
+		if (_page === currPage) return;
+		currPage = _page;
+		sources = (await getSources({ page: currPage - 1 })) ?? { items: [], count: 0 };
+	}
+
 	function onClose(): void {
 		isOpen = false;
 		selectedSource = null;
@@ -74,7 +102,7 @@
 	}
 
 	async function onCreate(): Promise<void> {
-		$sources = (await getSources()) ?? { items: [], count: 0 };
+		sources = (await getSources({ page: currPage - 1 })) ?? { items: [], count: 0 };
 	}
 
 	$: {
@@ -83,49 +111,34 @@
 	}
 </script>
 
-<div class="flex w-full flex-col bg-neutral-800 sm:p-4">
-	<Button
-		on:click={() => onOpen()}
-		color="none"
-		class="text-primary-900 ring-neutral-800 hover:text-primary-700"
-	>
-		<PlusSolid></PlusSolid>
-	</Button>
-	<Listgroup
-		active
-		class="divide-y divide-gray-200 border-none bg-neutral-800 text-gray-300 dark:divide-gray-600"
-	>
-		{#each $sources.items as source (source.id)}
+<ItemsList
+	on:paginate={(e) => onPaginate(e.detail)}
+	on:previous={() => {
+		if (currPage > 1) onPaginate(currPage - 1);
+	}}
+	on:next={() => {
+		if (currPage < pages.length) onPaginate(currPage + 1);
+	}}
+	on:open={onOpen}
+	on:close={onClose}
+	on:delete={onDelete}
+	on:create={onCreate}
+	list={sources}
+	{pagerPages}
+	{isLoading}
+	{hasError}
+	{modalTitle}
+	{isOpen}
+>
+	<svelte:fragment slot="items">
+		{#each sources.items as source (source.id)}
 			<Source on:open={onOpen} on:delete={onDelete} {source}></Source>
 		{/each}
-		{#if $sources.count === 0 && !isLoading}
-			<div class="p-4 text-center">no sources found</div>
+		{#if sources.count === 0 && !isLoading}
+			<div class="p-4 text-center">no words found</div>
 		{/if}
-	</Listgroup>
-	{#if hasError}
-		<Toast
-			class="z-50"
-			divClass="w-full max-w-xs p-4 text-white bg-primary-900 shadow gap-3"
-			on:close={() => (hasError = null)}
-			position="bottom-right"
-			color="red"
-		>
-			<FireSolid slot="icon" />
-			<span>{hasError}</span>
-		</Toast>
-	{/if}
-	{#if isLoading}
-		<div class="flex h-32 items-center justify-center">
-			<Spinner class="h-8 w-8 text-primary-500" />
-		</div>
-	{/if}
-	<Modal
-		color="none"
-		defaultClass="max-h-full bg-neutral-800 text-white relative flex flex-col mx-auto"
-		title={modalTitle}
-		bind:open={isOpen}
-		on:close={onClose}
-	>
+	</svelte:fragment>
+	<div slot="open">
 		<Open source={selectedSource} {isUpsertMode} on:create={onCreate}>
 			<svelte:fragment slot="upsertMode">
 				<Button size="sm" on:click={() => (isUpsertMode = false)} outline class={upsertBtnStyle}>
@@ -138,5 +151,5 @@
 				</Button>
 			</svelte:fragment>
 		</Open>
-	</Modal>
-</div>
+	</div>
+</ItemsList>
