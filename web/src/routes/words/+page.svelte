@@ -4,10 +4,8 @@
 	import { goto } from '$app/navigation';
 	import { deleteWord, getWord, getWords } from '$lib/word';
 	import Word from './components/Word.svelte';
-	import { Listgroup, Pagination } from 'flowbite-svelte';
-	import { Toast } from 'flowbite-svelte';
-	import { FireSolid, PenSolid, UndoSolid, PlusSolid } from 'flowbite-svelte-icons';
-	import { Spinner, Modal, Button } from 'flowbite-svelte';
+	import { PenSolid, UndoSolid } from 'flowbite-svelte-icons';
+	import { Button } from 'flowbite-svelte';
 	import Open from './components/Open.svelte';
 	import type { WordDto, WordPreviewDto } from '$lib/word/model';
 	import { getPages } from '../shared/pager';
