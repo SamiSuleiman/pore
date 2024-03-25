@@ -1,18 +1,20 @@
-<script>
+<script lang="ts">
 	import { logout } from '$lib/auth';
 	import { Button } from 'flowbite-svelte';
-	import { isOutdated, userOverview } from '../../stores/user.store';
 	import { getUserOverview } from '$lib/user';
 	import { onMount } from 'svelte';
 	import { Card, Avatar } from 'flowbite-svelte';
+	import type { UserOverviewDto } from '$lib/user/models';
+
+	let user: UserOverviewDto | undefined;
 
 	onMount(async () => {
-		if ($userOverview === undefined || $isOutdated) userOverview.set(await getUserOverview());
+		user = await getUserOverview();
 	});
 </script>
 
 <div class="w-full bg-neutral-800 lg:p-4">
-	{#if $userOverview}
+	{#if user}
 		<Card
 			size="none"
 			class="flex items-center gap-4 border-transparent bg-transparent shadow-transparent"
@@ -21,15 +23,15 @@
 				<Button class="w-full font-bold" outline size="xs" on:click={logout} color="red"
 					>logout</Button
 				>
-				<Avatar src={$userOverview.avatar} size="xl" rounded />
+				<Avatar src={user.avatar} size="xl" rounded />
 			</div>
 			<div>
-				<h5 class="bg-neutral-800 text-white">welcome, {$userOverview.name}</h5>
+				<h5 class="bg-neutral-800 text-white">welcome, {user.name}</h5>
 				<div class="pt-4">
-					<p>word count: {$userOverview.wordCount}</p>
-					<p>tag count: {$userOverview.tagCount}</p>
-					<p>link count: {$userOverview.linkCount}</p>
-					<p>source count: {$userOverview.sourceCount}</p>
+					<p>word count: {user.wordCount}</p>
+					<p>tag count: {user.tagCount}</p>
+					<p>link count: {user.linkCount}</p>
+					<p>source count: {user.sourceCount}</p>
 				</div>
 			</div>
 		</Card>
