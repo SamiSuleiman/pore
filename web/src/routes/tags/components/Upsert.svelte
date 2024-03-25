@@ -15,6 +15,7 @@
 
 	const invalidFormErrMsg = 'please fill in all required fields';
 	let success = false;
+	let isSubmitting = false;
 
 	let form: UpsertTagDto = {
 		title: tag?.title ?? '',
@@ -48,8 +49,6 @@
 	$: err = Object.values(validators).some((v) => v.errMsg !== '' && v.isTouched)
 		? invalidFormErrMsg
 		: '';
-
-	let isSubmitting = false;
 
 	async function onSubmit(): Promise<void> {
 		success = false;

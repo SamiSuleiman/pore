@@ -22,6 +22,7 @@
 
 	const invalidFormErrMsg = 'please fill in all required fields';
 	let success = false;
+	let isSubmitting = false;
 
 	let form: AddWordDto = {
 		content: word?.content ?? '',
@@ -59,8 +60,6 @@
 	$: err = Object.values(validators).some((v) => v.errMsg !== '' && v.isTouched)
 		? invalidFormErrMsg
 		: '';
-
-	let isSubmitting = false;
 
 	async function onSubmit(): Promise<void> {
 		success = false;
