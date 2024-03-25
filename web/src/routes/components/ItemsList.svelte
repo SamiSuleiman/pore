@@ -22,12 +22,12 @@
 	>
 		<PlusSolid></PlusSolid>
 	</Button>
-	{#if list.count > 0 && pagerPages.length > 1}
+	{#if list.count > 0}
 		<Pagination
 			on:click={(e) => dispatch('paginate', e)}
 			ulClass="flex justify-center align-middle"
 			class=""
-			activeClass="text-white border bg-primary-900 hover:bg-primary-800 hover:text-white"
+			activeClass="text-white bg-primary-900 hover:bg-primary-800 hover:text-white"
 			normalClass="text-gray-500 bg-white hover:bg-primary-800 hover:text-white bg-neutral-800"
 			pages={pagerPages}
 			on:previous={() => dispatch('previous')}
@@ -66,7 +66,7 @@
 	>
 		<slot name="open" />
 	</Modal>
-	{#if list.count > 0 && pagerPages.length > 1}
+	{#if list.count > 0}
 		<Pagination
 			on:click={(e) => dispatch('paginate', e)}
 			ulClass="flex justify-center align-middle"

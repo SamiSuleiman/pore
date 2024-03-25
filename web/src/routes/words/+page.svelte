@@ -134,14 +134,14 @@
 	{modalTitle}
 	{isOpen}
 >
-	<div slot="items">
+	<svelte:fragment slot="items">
 		{#each words.items as word (word.id)}
 			<Word on:open={onOpen} on:delete={onDelete} {word}></Word>
 		{/each}
 		{#if words.count === 0 && !isLoading}
 			<div class="p-4 text-center">no words found</div>
 		{/if}
-	</div>
+	</svelte:fragment>
 	<div slot="open">
 		<Open word={selectedWord} {isUpsertMode} on:create={onCreate}>
 			<svelte:fragment slot="upsertMode">
