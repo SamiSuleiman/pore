@@ -15,14 +15,19 @@ export function navigateToGoogleOAuth(): void {
 	window.location.href = AUTH_URL + '/google';
 }
 
-export function login(): void {
+export async function login(): Promise<void> {
 	const _urlTokens = extractTokensFromUrl();
 	const _cookieTokens = extractTokensFromCookie();
 
 	if (!_urlTokens && !_cookieTokens) return;
-	if (_urlTokens) setTokensInCookie(_urlTokens);
+	if (_cookieTokens) await refresh();
+	else if (_urlTokens) setTokensInCookie(_urlTokens);
 
 	isLoggedIn.set(true);
+	setInterval(() => {
+		refresh();
+	}, 1000);
+
 	goto('/');
 }
 
@@ -35,8 +40,12 @@ export async function refresh(): Promise<void> {
 	const _tokens = extractTokensFromCookie();
 	if (!_tokens) return;
 	const _refreshed = await get<AuthCookie>(`${AUTH_URL}/refresh`);
-	if (!_refreshed) return;
+	if (!_refreshed) {
+		logout();
+		return;
+	}
 	setTokensInCookie(_refreshed);
+	isLoggedIn.set(true);
 }
 
 export function extractTokensFromUrl(): AuthCookie | undefined {

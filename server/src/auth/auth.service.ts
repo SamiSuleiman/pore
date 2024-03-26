@@ -62,7 +62,7 @@ export class AuthService {
           role: user.role,
           type: 'access',
         },
-        { expiresIn: '30 days' },
+        { expiresIn: '10 minutes' },
       ),
       refreshToken: await this.jwtService.signAsync(
         {
