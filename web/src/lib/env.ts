@@ -1,17 +1,17 @@
 import { dev } from '$app/environment';
 
-const _prodEnv : Env= {
-	// baseUrl: 'https://pore.mmayss.com/api'
+const _prodEnv: Env = {
+	baseUrl: 'https://pore.mmayss.com/api',
 	// just for now for docker thing test
-	baseUrl: 'http://localhost:3000/api'
-}
+	// baseUrl: 'http://localhost:3000/api'
+};
 
-const _devEnv : Env= {
-	baseUrl: 'http://localhost:3000/api'
-}
+const _devEnv: Env = {
+	baseUrl: 'http://localhost:3000/api',
+};
 
 interface Env {
-	baseUrl: string
+	baseUrl: string;
 }
 
-export const env = dev ? _devEnv : _prodEnv
+export const env = dev ? _devEnv : _prodEnv;

@@ -7,6 +7,7 @@ import { WordModule } from './features/word/word.module';
 import { SourceModule } from './features/source/source.module';
 import { TagModule } from './features/tag/tag.module';
 import { LinkModule } from './features/link/link.module';
+import { env } from 'process';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LinkModule } from './features/link/link.module';
     AuthModule,
     DataModule.forRoot(),
     ConfigModule.forRoot({
+      envFilePath: env['NODE_ENV'] === 'dev' ? '.env.local' : '.env',
       isGlobal: true,
     }),
   ],
