@@ -108,6 +108,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>pore | sources</title>
+</svelte:head>
+
 <ItemsList
 	on:paginate={(e) => onPaginate(e.detail)}
 	on:previous={() => {

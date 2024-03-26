@@ -4,6 +4,14 @@
 	import Profile from './components/Profile.svelte';
 </script>
 
+<svelte:head>
+	{#if $isLoggedIn}
+		<title>pore | welcome</title>
+	{:else}
+		<title>pore | authenticate</title>
+	{/if}
+</svelte:head>
+
 {#if $isLoggedIn}
 	<Profile />
 {:else}

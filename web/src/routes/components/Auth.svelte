@@ -25,10 +25,10 @@
 	>
 		<h5 class="bg-neutral-800 font-bold text-white">Login / Sign up</h5>
 		<Button class="w-full" on:click={onNavToGithub}
-			>Continue with GitHub <GithubSolid class="ms-1"></GithubSolid></Button
+			>continue with gitHub <GithubSolid class="ms-1"></GithubSolid></Button
 		>
 		<Button class="w-full" on:click={onNavToGoogle}
-			>Continue with Google <GoogleSolid class="ms-1"></GoogleSolid></Button
+			>continue with google <GoogleSolid class="ms-1"></GoogleSolid></Button
 		>
 	</Card>
 </div>
