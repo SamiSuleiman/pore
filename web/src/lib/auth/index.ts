@@ -26,7 +26,7 @@ export async function login(): Promise<void> {
 	isLoggedIn.set(true);
 	setInterval(() => {
 		refresh();
-	}, 1000);
+	}, 60000);
 
 	goto('/');
 }

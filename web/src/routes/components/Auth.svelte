@@ -23,12 +23,20 @@
 		size="none"
 		class="flex items-center gap-4 border-transparent bg-transparent shadow-transparent"
 	>
-		<h5 class="bg-neutral-800 font-bold text-white">Login / Sign up</h5>
-		<Button class="w-full" on:click={onNavToGithub}
-			>continue with gitHub <GithubSolid class="ms-1"></GithubSolid></Button
+		<h1 class="mb-8 bg-neutral-800 text-4xl font-bold text-white">login / sign up</h1>
+		<Button size="sm" outline class="w-full border-none md:w-1/2" on:click={onNavToGithub}>
+			<span
+				class="hover:devoration-white text-white underline decoration-primary-900 decoration-wavy"
+				>continue with gitHub</span
+			>
+			<GithubSolid class="ms-1"></GithubSolid></Button
 		>
-		<Button class="w-full" on:click={onNavToGoogle}
-			>continue with google <GoogleSolid class="ms-1"></GoogleSolid></Button
+		<Button size="sm" outline class="w-full border-none md:w-1/2" on:click={onNavToGoogle}
+			><span
+				class="text-white underline decoration-primary-900 decoration-wavy hover:decoration-white"
+				>continue with google</span
+			>
+			<GoogleSolid class="ms-1"></GoogleSolid></Button
 		>
 	</Card>
 </div>
