@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  nest:
+    image: mmayss/pore_server
+    container_name: nest
+    restart: unless-stopped
+    environment:
+      - DB_HOST=db
+    env_file:
+      - ./.env
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - db
+    networks:
+      - pore_network
+
+  web:
+    image: mmayss/pore_web
+    container_name: web
+    restart: unless-stopped
+    environment:
+      - PORT=4200
+    ports:
+      - "127.0.0.1:4200:4200"
+    expose:
+      - "4200"
+    depends_on:
+      - nest
+    networks:
+      - pore_network
+
+  db:
+    image: mariadb
+    container_name: db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASS}
+    volumes:
+      - "~/.local.docker/volumes/mariadb.backup:/var/lib/mysql:delegated"
+    networks:
+      - pore_network
+
+networks:
+  pore_network:
+    driver: bridge
