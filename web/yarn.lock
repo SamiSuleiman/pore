@@ -492,16 +492,6 @@
     "@rollup/plugin-node-resolve" "^15.2.3"
     rollup "^4.9.5"
 
-"@sveltejs/adapter-node@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-node/-/adapter-node-5.0.1.tgz#b5ed2d5897d06589e6266095a531b2ba8fbe4a15"
-  integrity sha512-eYdmxdUWMW+dad1JfMsWBPY2vjXz9eE+52A2AQnXPScPJlIxIVk5mmbaEEzrZivLfO2wEcLTZ5vdC03W69x+iA==
-  dependencies:
-    "@rollup/plugin-commonjs" "^25.0.7"
-    "@rollup/plugin-json" "^6.1.0"
-    "@rollup/plugin-node-resolve" "^15.2.3"
-    rollup "^4.9.5"
-
 "@sveltejs/kit@^2.0.0":
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.5.3.tgz#0d06481c234888287fa6d3c51393c9aa0f6c43ae"
@@ -1378,10 +1368,10 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.1.tgz#21db470729a6734d4997002f439cb308987f567a"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
 
-flowbite-svelte-icons@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/flowbite-svelte-icons/-/flowbite-svelte-icons-1.4.3.tgz#e46df13f24a4e13161567505c801547dbeb12620"
-  integrity sha512-SNxTHPsWnynsy6SLr5nC0YRLmP3FRfl/LS1ozyx7vNraGwa2AP+23DX4pPrhVauBhoSWUAyzaM2ZbpscS2aGVQ==
+flowbite-svelte-icons@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/flowbite-svelte-icons/-/flowbite-svelte-icons-1.5.0.tgz#95fcab3857a65c901f8195abc9dd0f63776f8994"
+  integrity sha512-8s0pb7MplWcWDI3/QB6sqH1aXMuChom7iDZqtjFd7VAoqae5vlSusi+J8JdF4Y/9l1cav5gQrAyK1+WcYTUMBw==
 
 flowbite-svelte@^0.44.24:
   version "0.44.24"
