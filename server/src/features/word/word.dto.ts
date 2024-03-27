@@ -37,7 +37,7 @@ export class UpsertWordDto {
   sourceId?: string;
 
   @IsNotEmpty()
-  @MaxLength(9)
+  @MaxLength(60)
   language: string;
 
   @IsArray()
