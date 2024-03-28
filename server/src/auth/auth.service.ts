@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string) {
-    let _tokenPayload: JwtPayload;
+    let _tokenPayload: JwtPayload | undefined;
 
     try {
       _tokenPayload =
@@ -30,7 +30,7 @@ export class AuthService {
 
     return await this.signTokens(
       await this.userService.usersRepo.findOneByOrFail({
-        email: _tokenPayload.email,
+        id: _tokenPayload.sub,
       }),
     );
   }
