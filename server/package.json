@@ -39,7 +39,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
-    "typeorm-extension": "^3.5.0"
+    "typeorm-extension": "^3.5.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
