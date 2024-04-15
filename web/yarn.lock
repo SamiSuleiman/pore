@@ -427,10 +427,10 @@
     "@rollup/plugin-node-resolve" "^15.2.3"
     rollup "^4.9.5"
 
-"@sveltejs/kit@^2.5.5":
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.5.5.tgz#ceb4e2ec35bc82a5fedebc97a02c51815b8b0d32"
-  integrity sha512-ULe3PB00q4+wYRL+IS5FDPsCEVnhEITofm7b9Yz8malcH3r1SAnW/JJ6T13hIMeu8QNRIuVQWo+P4+2VklbnLQ==
+"@sveltejs/kit@^2.5.6":
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.5.6.tgz#4736df8ecb1c985e883609d42cded36c51cb14d8"
+  integrity sha512-AYb02Jm5MfNqJHc8zrj7ScQAFAKmTUCkpkfoi8EVaZZDdnjkvI7L2GtnTDhpiXSAZRVitZX4qm59sMS1FgL+lQ==
   dependencies:
     "@types/cookie" "^0.6.0"
     cookie "^0.6.0"
