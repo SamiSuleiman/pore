@@ -20,10 +20,10 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@babel/runtime@^7.23.7":
-  version "7.24.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.0.tgz#584c450063ffda59697021430cb47101b085951e"
-  integrity sha512-Chk32uHMg6TnQdvw2e9IlqPpFX/6NLuK0Ys2PqLb7/gL5uFn9mXvK715FGLlOLQrcO4qIkNHkvPGktzzXexsFw==
+"@babel/runtime@^7.24.1":
+  version "7.24.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.4.tgz#de795accd698007a66ba44add6cc86542aff1edd"
+  integrity sha512-dkxf7+hn8mFBwKjs9bvBlArzLVxVbS8usaPUDd5p2a9JCL9tB8OaOVN1isD4+Xyk4ns89/xeOmbQvgdK7IIVdA==
   dependencies:
     regenerator-runtime "^0.14.0"
 
@@ -723,10 +723,10 @@ anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-apexcharts@^3.46.0:
-  version "3.47.0"
-  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.47.0.tgz#887db702b7246119d3e9077a45bbe05f236fbe84"
-  integrity sha512-s/fgNCA69b8lJdhI3R7Z+/Df47RPplLyHwuvttecR+aaZ3/Pm6wHYPiAGjqDNbVsMGXhuA9mcOpIYU5ZWeSdeg==
+apexcharts@^3.48.0:
+  version "3.49.0"
+  resolved "https://registry.yarnpkg.com/apexcharts/-/apexcharts-3.49.0.tgz#b359fc9be8ffe45de3e8b553ebdcf18ad2a67e7e"
+  integrity sha512-2T9HnbQFLCuYRPndQLmh+bEQFoz0meUbvASaGgiSKDuYhWcLBodJtIpKql2aOtMx4B/sHrWW0dm90HsW4+h2PQ==
   dependencies:
     "@yr/monotone-cubic-spline" "^1.0.3"
     svg.draggable.js "^2.2.2"
@@ -1325,15 +1325,15 @@ flowbite-svelte-icons@1.4.3:
   resolved "https://registry.yarnpkg.com/flowbite-svelte-icons/-/flowbite-svelte-icons-1.4.3.tgz#e46df13f24a4e13161567505c801547dbeb12620"
   integrity sha512-SNxTHPsWnynsy6SLr5nC0YRLmP3FRfl/LS1ozyx7vNraGwa2AP+23DX4pPrhVauBhoSWUAyzaM2ZbpscS2aGVQ==
 
-flowbite-svelte@^0.44.24:
-  version "0.44.24"
-  resolved "https://registry.yarnpkg.com/flowbite-svelte/-/flowbite-svelte-0.44.24.tgz#c7b74e3c40742bcd15b164621f1934e5fb7c509b"
-  integrity sha512-kXhJZHGpBVq5RFOoYnzRCEM8eFa81DVp4KjUbBsLJptKhizbSSBJuYApWIQb9pBCS8EBhX4PAX+RsgEDZfEqtA==
+flowbite-svelte@^0.46.0:
+  version "0.46.0"
+  resolved "https://registry.yarnpkg.com/flowbite-svelte/-/flowbite-svelte-0.46.0.tgz#df0a538c3c8e8c970e001ddb98f55f6e5f0a48ed"
+  integrity sha512-Qw4zX4nCbxP5ZemksC9/EVGE9WRnD8FsR5CrdZRxm1RGkMOv2nrKxDQ8MXHF/GwdEutFU5UeaQncQuqgY5DoVg==
   dependencies:
     "@floating-ui/dom" "^1.6.3"
-    apexcharts "^3.46.0"
+    apexcharts "^3.48.0"
     flowbite "^2.3.0"
-    tailwind-merge "^2.2.1"
+    tailwind-merge "^2.3.0"
 
 flowbite@^2.3.0:
   version "2.3.0"
@@ -2594,12 +2594,12 @@ svg.select.js@^3.0.1:
   dependencies:
     svg.js "^2.6.5"
 
-tailwind-merge@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-2.2.1.tgz#3f10f296a2dba1d88769de8244fafd95c3324aeb"
-  integrity sha512-o+2GTLkthfa5YUt4JxPfzMIpQzZ3adD1vLVkvKE1Twl9UAhGsEbIZhHHZVRttyW177S8PDJI3bTQNaebyofK3Q==
+tailwind-merge@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-2.3.0.tgz#27d2134fd00a1f77eca22bcaafdd67055917d286"
+  integrity sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==
   dependencies:
-    "@babel/runtime" "^7.23.7"
+    "@babel/runtime" "^7.24.1"
 
 tailwindcss@^3.4.3:
   version "3.4.3"
