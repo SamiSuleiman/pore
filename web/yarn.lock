@@ -1360,10 +1360,10 @@ flowbite-svelte-icons@1.4.3:
   resolved "https://registry.yarnpkg.com/flowbite-svelte-icons/-/flowbite-svelte-icons-1.4.3.tgz#e46df13f24a4e13161567505c801547dbeb12620"
   integrity sha512-SNxTHPsWnynsy6SLr5nC0YRLmP3FRfl/LS1ozyx7vNraGwa2AP+23DX4pPrhVauBhoSWUAyzaM2ZbpscS2aGVQ==
 
-flowbite-svelte@^0.46.0:
-  version "0.46.0"
-  resolved "https://registry.yarnpkg.com/flowbite-svelte/-/flowbite-svelte-0.46.0.tgz#df0a538c3c8e8c970e001ddb98f55f6e5f0a48ed"
-  integrity sha512-Qw4zX4nCbxP5ZemksC9/EVGE9WRnD8FsR5CrdZRxm1RGkMOv2nrKxDQ8MXHF/GwdEutFU5UeaQncQuqgY5DoVg==
+flowbite-svelte@^0.46.1:
+  version "0.46.1"
+  resolved "https://registry.yarnpkg.com/flowbite-svelte/-/flowbite-svelte-0.46.1.tgz#a6b4cacc5b780dbf6aadecf97a043c2619c3225b"
+  integrity sha512-GMQP4Fxn4mYu12XTNRbOHMYMklbP29sKFZUZYekryxhWak2zbSlI1ozhBtnrD2WDbFBPqZ64IcyButOkYpz+WQ==
   dependencies:
     "@floating-ui/dom" "^1.6.3"
     apexcharts "^3.48.0"
