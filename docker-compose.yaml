@@ -26,6 +26,7 @@ services:
     restart: unless-stopped
     environment:
       - PORT=4200
+      - PUBLIC_BASE_URL=http://localhost:3000/api
     ports:
       - "127.0.0.1:4200:4200"
     expose:
